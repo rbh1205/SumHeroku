@@ -5,16 +5,16 @@ const config = require('../config');
 
 mongoose.connect(config.databaseURI, {useNewUrlParser: true, useUnifiedTopology: true})
 
-exports.createProduct = function (name, price, Catagory) {
+exports.createProduct = function (name, price, category) {
     return Product.create({
         name,
         price,
-        Catagory
+        category
     });
 };
 
-exports.getProduct = function (produktId) {
-    return Product.findById(produktId).exec();
+exports.getProduct = function (productId) {
+    return Product.findById(productId).exec();
 };
 
 exports.getProducts = function () {

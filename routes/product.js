@@ -14,8 +14,8 @@ router
     })
     .post('/', async (request, response) => {
             try {
-                let {name, price, catagory} = request.body;
-                await controller.createProduct(name, price, catagory);
+                let {name, price, category} = request.body;
+                await controller.createProduct(name, price, category);
                 response.send({message: 'Product saved!'});
             } catch (e) {
                 sendStatus(e, response);
