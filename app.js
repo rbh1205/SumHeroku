@@ -5,9 +5,8 @@ const config = require('./config');
 
 app.use(express.static('public'));
 app.use(express.json());
-// app.use('/api/jokes', require('./routes/jokes'));
-// app.use('/api/othersites', require('./routes/othersites'));
-// app.use('/api/otherjokes', require('./routes/otherjokes'));
+app.use('/api/products', require('./routes/product'));
+app.use('/api/orders', require('./routes/order'));
 
 const port = process.env.PORT || config.localPort; // Heroku
 app.listen(port);

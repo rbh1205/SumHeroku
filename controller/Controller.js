@@ -5,30 +5,34 @@ const config = require('../config');
 
 mongoose.connect(config.databaseURI, {useNewUrlParser: true, useUnifiedTopology: true})
 
-exports.createProduct = function (name, price, Catagory) {
+exports.createProduct = function (name, price, category) {
     return Product.create({
         name,
         price,
-        Catagory
+        category
     });
 };
 
-exports.getProduct = function (produktId) {
-    return Product.findById(produktId).exec();
+exports.getProduct = function (productId) {
+    return Product.findById(productId).exec();
 };
 
 exports.getProducts = function () {
     return Product.find().populate('product').exec();
 };
 
-exports.createOrder = function (orderID, time, table, waiter, products, price) {
+exports.deleteProduct(product) = async function () {
+    return await Product.deleteOne().where('_id').eq(product._id).exec()
+};
+
+exports.createOrder = function (time, table, waiter, products, price, comment) {
     return Order.create({
-        orderID,
         time,
         table,
         waiter,
         products,
-        price
+        price,
+        comment
     });
 };
 
@@ -38,5 +42,9 @@ exports.getOrder = function (orderID) {
 
 exports.getOrders = function () {
     return Order.find().populate('order').exec();
+};
+
+exports.deleteOrder(order) = async function () {
+    return await Order.deleteOne().where('_id').eq(order._id).exec()
 };
 

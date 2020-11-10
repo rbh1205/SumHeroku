@@ -1,27 +1,37 @@
-const controller = require("../controllers/controller");
+const controller = require("../controller/controller");
 const express = require('express');
-const { Router } = require("express");
 const router = express.Router();
 
 router
     .get('/', async (request, response) => {
         try {
-            let Products = await controller.getProducts();
-            response.send(Products);
+            let products = await controller.getProducts();
+            response.send(products);
         } catch (e) {
             sendStatus(e, response);
         }
     })
     .post('/', async (request, response) => {
             try {
-                let {name, price, catagory} = request.body;
-                await controller.createProduct(name, price, catagory);
+                let {name, price, category} = request.body;
+                await controller.createProduct(name, price, category);
                 response.send({message: 'Product saved!'});
             } catch (e) {
                 sendStatus(e, response);
             }
         }
-    );
+    )
+    .delete('/:productID', async (request, response) => {
+        try {
+            await controller.deleteProduct(request.params.productID);
+            response.send({message: 'Product deleted!'});
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    }
+);
+
+    
 
 function sendStatus(e, response) {
     console.error("Exception: " + e);
