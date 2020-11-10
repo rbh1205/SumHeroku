@@ -1,6 +1,6 @@
 // config.js
 const config = {
-    databaseURI: 'MONGODB-URL', // or MongoDB Atlas connection URI    
+    databaseURI: 'mongodb+srv://rbhansen:sum123@cluster0.aq1xn.mongodb.net/RestaurantFriheden?retryWrites=true&w=majority',
     localPort: 8080
 };
 
