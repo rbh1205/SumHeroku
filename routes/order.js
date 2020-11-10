@@ -13,8 +13,8 @@ router
     })
     .post('/', async (request, response) => {
             try {
-                let {time, table, waiter, products, price} = request.body;
-                await controller.createOrder(time, table, waiter, products, price);
+                let {time, table, waiter, products, price, comment} = request.body;
+                await controller.createOrder(time, table, waiter, products, price, comment);
                 response.send({message: 'Order saved!'});
             } catch (e) {
                 sendStatus(e, response);

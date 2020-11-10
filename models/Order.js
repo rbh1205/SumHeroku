@@ -6,7 +6,8 @@ const order = new mongoose.Schema({
     table: String,
     waiter: String,
     products: [{ type: mongoose.ObjectId, ref: 'Product' }],
-    price: Number
+    price: Number,
+    comment: String
 });
 
 module.exports = mongoose.model('Order', order);

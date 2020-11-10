@@ -25,14 +25,14 @@ exports.deleteProduct(product) = async function () {
     return await Product.deleteOne().where('_id').eq(product._id).exec()
 };
 
-exports.createOrder = function (orderID, time, table, waiter, products, price) {
+exports.createOrder = function (time, table, waiter, products, price, comment) {
     return Order.create({
-        orderID,
         time,
         table,
         waiter,
         products,
-        price
+        price,
+        comment
     });
 };
 
