@@ -6,8 +6,8 @@ const router = express.Router();
 router
     .get('/', async (request, response) => {
         try {
-            let produkts = await controller.getProdukts();
-            response.send(produkts);
+            let Products = await controller.getProducts();
+            response.send(Products);
         } catch (e) {
             sendStatus(e, response);
         }
@@ -15,8 +15,8 @@ router
     .post('/', async (request, response) => {
             try {
                 let {name, price, catagory} = request.body;
-                await controller.createProdukt(name, price, catagory);
-                response.send({message: 'Produkt saved!'});
+                await controller.createProduct(name, price, catagory);
+                response.send({message: 'Product saved!'});
             } catch (e) {
                 sendStatus(e, response);
             }
