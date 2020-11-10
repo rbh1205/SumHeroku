@@ -5,26 +5,26 @@ const router = express.Router();
 router
     .get('/', async (request, response) => {
         try {
-            let products = await controller.getProducts();
-            response.send(products);
+            let orders = await controller.getOrders();
+            response.send(orders);
         } catch (e) {
             sendStatus(e, response);
         }
     })
     .post('/', async (request, response) => {
             try {
-                let {name, price, category} = request.body;
-                await controller.createProduct(name, price, category);
-                response.send({message: 'Product saved!'});
+                let {time, table, waiter, products, price} = request.body;
+                await controller.createOrder(time, table, waiter, products, price);
+                response.send({message: 'Order saved!'});
             } catch (e) {
                 sendStatus(e, response);
             }
         }
     )
-    .delete('/:productID', async (request, response) => {
+    .delete('/:orderID', async (request, response) => {
         try {
-            await controller.deleteProduct(request.params.productID);
-            response.send({message: 'Product deleted!'});
+            await controller.deleteOrder(request.params.orderID)
+            response.send({message: 'Order deleted!'});
         } catch (e) {
             sendStatus(e, response);
         }
