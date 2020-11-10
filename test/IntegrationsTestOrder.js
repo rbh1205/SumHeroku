@@ -4,6 +4,7 @@ const controller = require("../controller/controller");
 const app = require('../app.js');
 const { response } = require ('..app.js');
 
+//Integrationstest af produkter
 describe('integration test - promise', function () {
     
     it("get('/') test", function (){
@@ -45,7 +46,18 @@ describe('integration test - promise', function () {
         response[response.length - 1].waiter.should.be.equal('testWaiter');
         response[response.length - 1].products.length.should.be.equal(2);
         response[response.length - 1].price.should.be.equal(100);
-    })
+    });
     
+    it('should return status 200 after DELETING a order', function(done) {
+        return request
+        .delete('/api/orders/' + order.orderID)
+        .end(function(err, res){
+            if(err) {
+                throw err;
+            }
+            res.should.have.status(200);
+            done(); 
+        });
+    });
 })
 
