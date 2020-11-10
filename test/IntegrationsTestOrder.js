@@ -13,32 +13,38 @@ describe('integration test - promise', function () {
             .expect('Content-Type', /html/);
     });
 
-    it("get('/product') test", async () => {
+    it("get('/Order') test", async () => {
         let response = await request(app)
             .get('/product')
             .expect(200)
             .expect('Content-Type', /json/);
         response.body.length.should.be.greaterThanOrEqual(1); 
-        response.body[0].name.should.be.equal('testProduct');
+        response.body[0].name.should.be.equal('testOrder');
     });
 
-    it("post('/product') test", async () => {
+    it("post('/Order') test", async () => {
         let response = await request(app)
-            .post('/product')
+            .post('/Order')
             .send({
-                'name' : 'testProduct2',
-                'price' : 50,
-                'category' : 'testCategory'
+                'orderID' : 'testOrder2',
+                'time' : 'testTime',
+                'table' : 'testTable',
+                'waiter' : 'testWaiter',
+                'products' : [product1, product2],
+                'price' : 100
             })
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
             .expect(200);
-        response.body.message.should.be.equal('Product saved!')
+        response.body.message.should.be.equal('Order saved!')
         response = await controller.getProducts(); 
         response.length.should.be.greaterThanOrEqual(2);
-        response[response.length - 1].name.should.be.equal('testProduct2')
-        response[response.length - 1].price.should.be.equal(50)
-        response[response.length - 1].category.should.be.equal('testCategory')
+        response[response.length - 1].orderID.should.be.equal('testOrder2');
+        response[response.length - 1].time.should.be.equal('testTime');
+        response[response.length - 1].table.should.be.equal('testTable');
+        response[response.length - 1].waiter.should.be.equal('testWaiter');
+        response[response.length - 1].products.length.should.be.equal(2);
+        response[response.length - 1].price.should.be.equal(100);
     })
     
 })
