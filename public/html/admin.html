@@ -1,15 +1,21 @@
 <head>
+    <script src="../index.js" defer></script>
     <link rel="stylesheet" href="../index.css">
 </head>
 
+
 <body>
-    <h3>Admin</h3>
-    <div id="create">
-        <Label for="Navn">Navn: </Label><br>
-        <input type="text" id="Navn"><br>
-        <Label for="Pris">Pris: </Label><br>
-        <input type="text" id="Pris"><br>
-        <Label for="Kategori">Kategori: </Label>
-        <Select type="text" id="Kategori"></Select>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Produkt')">Produkt</button>
+        <button class="tablinks" onclick="openTab(event, 'Salgsstatistik')">Salgsstatistik</button>
+    </div>
+
+    <div id="Produkt" class="tabcontent">
+        <embed src="produkt.html"></embed>
+    </div>
+
+    <div id="Salgsstatistik" class="tabcontent">
+        <embed src="salgsstatistik.html"></embed>
     </div>
 </body>
+
