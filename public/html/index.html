@@ -3,24 +3,19 @@
 
 <head>
     <script src="../index.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../index.css">
-    <link rel="icon" href="../img/favicon.png">
+    <!--link rel="icon" href="../img/favicon.png"-->
     <title>Bestillingssystem</title>
 </head>
 
 <body>
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Bestilling')">Bestilling</button>
-        <button class="tablinks" onclick="openTab(event, 'Admin')">Admin</button>
+        <button class="tablinks" id='bestilling'>Bestilling</button>
+        <button class="tablinks" id='admin'>Admin</button>
     </div>
 
-    <div id="Bestilling" class="tabcontent">
-        <embed src="bestilling.html"></embed>
-    </div>
-
-    <div id="Admin" class="tabcontent">
-        <embed src="admin.html"></embed>
-    </div>
+    <div id='div1'></div>
 
 </body>
 
