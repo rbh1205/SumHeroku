@@ -21,9 +21,9 @@ exports.getProducts = function () {
     return Product.find().populate('product').exec();
 };
 
-exports.deleteProduct(product) = async function () {
-    return await Product.deleteOne().where('_id').eq(product._id).exec()
-};
+// exports.deleteProduct(product) = async function () {
+//     return await Product.deleteOne().where('_id').eq(product._id).exec()
+// };
 
 exports.createOrder = function (time, table, waiter, products, price, comment) {
     return Order.create({
@@ -44,7 +44,7 @@ exports.getOrders = function () {
     return Order.find().populate('order').exec();
 };
 
-exports.deleteOrder(order) = async function () {
-    return await Order.deleteOne().where('_id').eq(order._id).exec()
-};
+// exports.deleteOrder(order) = async function () {
+//     return await Order.deleteOne().where('_id').eq(order._id).exec()
+// };
 
