@@ -25,6 +25,14 @@ async function deLete(url) {
     return await respons.json();
 }
 
+async function getText(url) {
+    const respons = await fetch(url);
+    if (respons.status !== 200) // OK
+        throw new Error(respons.status);
+    return await respons.text();
+}
+
+
 let adminTab = document.getElementById('admin')
 let bestillingTab = document.getElementById('bestilling')
 
@@ -42,6 +50,11 @@ function openTab(tabName) {
         console.log(tabName + '.html')
     })
 }
+
+
+
+
+
 
 
 

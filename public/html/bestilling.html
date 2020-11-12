@@ -1,8 +1,22 @@
 <head>
     <link rel="stylesheet" href="../index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../bestilling.js" defer></script>
 </head>
 
 <body>
     <h3>Bestilling</h3>
-    <p>Bestillingsindhold her</p>
+    <div id="produkter">
+        
+    </div>
+    <div>
+        <table id='regning'>
+            <tr>
+                <th>Beskrivelse</th>
+                <th>Antal</th>
+                <th>Pris</th>
+            </tr>
+        </table>
+        <input type='text' id='samletPris' value=0></input>
+    </div>
 </body>
