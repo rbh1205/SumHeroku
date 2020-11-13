@@ -1,31 +1,62 @@
 <head>
     <script src="../admin.js" defer></script>
-    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 
 <body>
-
-
-    <div id='div1'></div>
-</body>
-
     <h3>Admin</h3>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
-    <p>Adminindhold her</p>
+
+    <span id="buttons">
+        <button id="opretBtn">Opret vare</button>
+        <button id="ændreBtn">Ændre vare</button>
+    </span>
+
+    <div id="salgsoversigt">
+        <label for="dagenssalg">Dagens salg</label>
+        <table id="dagenssalg">
+            <tr>
+                <th>Beskrivelse</th>
+                <th>Antal</th>
+                <th>Pris</th>
+            </tr>
+            <tr>
+                <td>Buffet voksen</td>
+                <td>4</td>
+                <td>796</td>
+            </tr>
+            <tr>
+                <td>Cola - lille</td>
+                <td>2</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>Faxe - stor</td>
+                <td>1</td>
+                <td>420</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="opretModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Opret vare</h3>
+            <label for="beskrivelse">Beskrivelse</label>
+            <input type="text" id="beskrivelse">
+
+            <label for="pris">Pris</label>
+            <input type="text" id="pris">
+
+            <label for="kategori">Kategori</label>
+            <input type="text" id="kategori">
+
+            <button id="opret">Opret</button>
+            <button id="annuller">Annuller</button>
+        </div>
+
+    </div>
+
 </body>

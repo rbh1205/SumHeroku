@@ -1,0 +1,68 @@
+body {font-family: Arial;}
+
+
+#buttons button {
+    display: block;
+    padding: 10px;
+    margin: 10px;
+}
+
+#dagenssalg {
+    border-collapse: collapse;
+}
+
+#dagenssalg td, #dagenssalg th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#dagenssalg tr:nth-child(even){background-color: #f2f2f2;}
+
+#dagenssalg tr:hover {background-color: #ddd;}
+
+#dagenssalg th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+  
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 200px;    
+    display: grid;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
