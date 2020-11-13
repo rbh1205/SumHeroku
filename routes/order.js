@@ -17,10 +17,11 @@ router
             try {
                 let {time, table, waiter, products, price, comment} = request.body;
                 await controller.createOrder(time, table, waiter, products, price, comment);
-                response.send({message: 'Order saved!'});
+                // response.send({message: 'Order saved!'});
             } catch (e) {
                 sendStatus(e, response);
             }
+            response.sendStatus(201)
         }
     )
     .delete('/:orderID', async (request, response) => {
