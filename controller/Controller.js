@@ -5,8 +5,9 @@ const config = require('../config');
 
 mongoose.connect(config.databaseURI, {useNewUrlParser: true, useUnifiedTopology: true})
 
-exports.createProduct = function (name, price, category) {
+exports.createProduct = function ( name, price, category) {
     return Product.create({
+    
         name,
         price,
         category
@@ -26,6 +27,7 @@ exports.getProducts = function () {
 // };
 
 exports.createOrder = function (time, table, waiter, products, price, comment) {
+
     return Order.create({
         time,
         table,
@@ -33,7 +35,7 @@ exports.createOrder = function (time, table, waiter, products, price, comment) {
         products,
         price,
         comment
-    });
+    }, {collection:'UnpaidOrder'});
 };
 
 exports.getOrder = function (orderID) {

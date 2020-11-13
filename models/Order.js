@@ -5,7 +5,7 @@ const order = new mongoose.Schema({
     time: String,
     table: String,
     waiter: String,
-    products: [{ type: mongoose.ObjectId, ref: 'Product' }],
+    products: [{String, String, String}],
     price: Number,
     comment: String
 });
