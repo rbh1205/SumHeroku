@@ -1,0 +1,35 @@
+body {font-family: Arial;}
+
+#regning th {
+    background-color: #4CAF50;
+    padding: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+#regning td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#regning tr:nth-child(even){background-color: #9e9d9d;}
+#regning tr:hover {background-color: #ddd;}
+
+
+
+#theader th {
+    background-color: #4CAF50;
+    padding: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+
+#theader tr:nth-child(even){background-color: #9e9d9d;}
+#theader tr:hover {background-color: #ddd;}
