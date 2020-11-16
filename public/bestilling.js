@@ -90,7 +90,7 @@ function productHandler(event) {
         // regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
     else {
-        regning.innerHTML += '<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button id="buttonNr' + linjeID + '">X</button></td></tr>'
+        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button id="buttonNr' + linjeID + '">X</button></td></tr>')
         linjeID++
         // document.getElementById('buttonNr' + linjeID).addEventListener('click', sletSalgslinje)
         // document.getElementById('inputNr' + linjeID).addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
