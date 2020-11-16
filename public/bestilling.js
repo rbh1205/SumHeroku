@@ -27,8 +27,8 @@ function generateProductTable(products) {
     return html;
 }
 
-let regning = document.getElementById('regning')
-let samletPrisInput = document.getElementById('samletPris')
+var regning = document.getElementById('regning')
+var samletPrisInput = document.getElementById('samletPris')
 
 function samletPris(pris) {
     let samletPris = parseInt(samletPrisInput.value) + parseInt(pris);
@@ -64,9 +64,9 @@ function productHandler(event) {
     samletPris(enkeltPris)
 }
 
-let opretButton = document.getElementById('opretButton')
-let bordSelect = document.getElementById('bordNr')
-let bemærkningInput = document.getElementById('bemærkning')
+var opretButton = document.getElementById('opretButton')
+var bordSelect = document.getElementById('bordNr')
+var bemærkningInput = document.getElementById('bemærkning')
 opretButton.onclick = opretHandler
 
 async function opretHandler() {
@@ -90,7 +90,7 @@ function getRegning(){
     
 
 
-let products;
+var products;
 async function main(url) {
     try {
         products = await get(url);
