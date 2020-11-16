@@ -35,7 +35,7 @@ opretBtn.onclick = async function () {
     let product = {
         name,
         price,
-        kategori: category
+        category
     };
 
     await post('/api/products/', product);

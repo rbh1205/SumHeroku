@@ -2,11 +2,11 @@
 const mongoose = require('mongoose');
 
 const order = new mongoose.Schema({
-    time: String,
+    time: Number,
     table: String,
     waiter: String,
-    products: [{String, String, String}],
-    price: Number,
+    products: String,
+    price: String,
     comment: String
 });
 
