@@ -137,11 +137,17 @@ async function jeppesFunkion(url) {
     } catch (fejl){
         console.log(fejl); 
     }
-    document.getElementById('orders').innerHTML = generateBestillingTable(orders);
+    let table = document.getElementById('orders');
+    table.innerHTML = generateBestillingTable(orders);
+    
+    console.log(table.childNodes.children)
+
     let trs = document.querySelectorAll('tr');
-    for (tr of trs) 
-        if (tr.id != 'theader')
-            tr.onclick = orderHandler; 
+    
+    // console.log(trs)
+    // for (tr of trs) 
+    //     if (tr.id != 'theader')
+            // tr.onclick = console.log(tr.innerHTML); 
 }
 jeppesFunkion('/api/orders')
 
