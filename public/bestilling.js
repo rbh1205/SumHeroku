@@ -1,4 +1,5 @@
 var opretButton = document.getElementById('opretButton')
+var rydButton = document.getElementById('rydButton')
 var bordSelect = document.getElementById('bordNr')
 var bemærkningInput = document.getElementById('bemærkning')
 var regning = document.getElementById('regning')
@@ -10,6 +11,7 @@ var modal = document.getElementById('bordeModal')
 var products;
 
 opretButton.onclick = opretHandler
+rydButton.onclick = rydRegning
 
 
 async function get(url) {
@@ -52,39 +54,77 @@ function generateBestillingTable(orders) {
     return html; 
 }
 
-function samletPris(pris) {
-    let samletPris = parseInt(samletPrisInput.value) + parseInt(pris);
+function samletPris() {
+    let priser = regning.children
+    let samletPris = 0;
+    for (let i = 1; i < priser.length; i++) {
+        samletPris += parseInt(priser[i].children[0].children[2].innerHTML)
+    }
     samletPrisInput.value = samletPris
 }
+
+let linjeID = 1;
 
 
 function productHandler(event) {
     let pAntal;
-    let pNavn = event.currentTarget.childNodes[0].innerHTML;
-    let pPris = event.currentTarget.childNodes[1].innerHTML;
+    let pNavn = event.currentTarget.children[0].innerHTML;
+    let pPris = event.currentTarget.children[1].innerHTML;
     let found = false;
     let enkeltPris;
     let foundElement;
     let i = 1;
+
     while (!found && i < regning.children.length) {
-        if (regning.children[i].childNodes[0].childNodes[0].innerHTML === pNavn) {
-            foundElement = regning.children[i].childNodes[0]
-            pAntal = parseInt(foundElement.childNodes[1].innerHTML) + 1
+        if (regning.children[i].children[0].children[0].innerHTML === pNavn) {
+            foundElement = regning.children[i].children[0]
+            pAntal = parseInt(foundElement.children[1].children[0].value)
             found = true
         }
         i++;
     }
     enkeltPris = parseInt(pPris)
     if (found) {
-        pPris *= pAntal;
-        foundElement.childNodes[1].innerHTML = pAntal;
-        foundElement.childNodes[2].innerHTML = pPris;
+        addSalgslinje(foundElement, enkeltPris, pAntal)
+        // regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
+        // regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
     else {
-        regning.innerHTML += '<tr><td>' + pNavn + '</td><td>' + 1 + '</td><td>' + pPris + '</td></tr>'
+        regning.innerHTML += '<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button id="buttonNr' + linjeID + '">X</button></td></tr>'
+        linjeID++
+        // document.getElementById('buttonNr' + linjeID).addEventListener('click', sletSalgslinje)
+        // document.getElementById('inputNr' + linjeID).addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
+        regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
+        regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
-    samletPris(enkeltPris)
+    // regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
+    // regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
+
+    samletPris()
 }
+
+function updateSalgslinje(enkeltPris, event) {
+    let antal = event.currentTarget.value;
+    let prisCell = event.currentTarget.parentElement.nextElementSibling;
+    let nyPris = antal * enkeltPris;
+    prisCell.innerHTML = nyPris;
+    samletPris();
+}
+
+
+
+function addSalgslinje(element, pris, antal) {
+    let nyAntal = antal + 1
+    let nyPris = pris * nyAntal
+    element.children[1].children[0].setAttribute('value', nyAntal);
+    element.children[2].innerHTML = nyPris
+    samletPris()
+}
+function sletSalgslinje(event) {
+    console.log("test")
+    event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
+}
+
 
 
 async function opretHandler() {
@@ -94,7 +134,7 @@ async function opretHandler() {
     let products = JSON.stringify(getRegning());
     let price = samletPrisInput.value;
     let comment = bemærkningInput.value;
-    await post('/api/orders',{time, table, waiter, products, price, comment});
+    await post('/api/orders', { time, table, waiter, products, price, comment });
     samletPrisInput.value = ""
     bemærkningInput.value = ""
     bordSelect.value = 1
@@ -102,19 +142,19 @@ async function opretHandler() {
 
 }
 
-function rydRegning(){
-    regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>' ;
+function rydRegning() {
+    regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>';
 }
 
-function getRegning(){
+function getRegning() {
     let toReturn = [];
-    for(let i = 1; i < regning.children.length; i++){
-        let j = regning.children[i].childNodes[0];
-        toReturn.push({name: j.childNodes[0].innerHTML, amount: j.childNodes[1].innerHTML, price: j.childNodes[2].innerHTML})
+    for (let i = 1; i < regning.children.length; i++) {
+        let j = regning.children[i].children[0];
+        toReturn.push({ name: j.children[0].innerHTML, amount: j.children[1].innerHTML, price: j.children[2].innerHTML })
     }
     return toReturn;
 }
-    
+
 async function main(url) {
     try {
         products = await get(url);
