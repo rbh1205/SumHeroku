@@ -86,7 +86,7 @@ function productHandler(event) {
         addSalgslinje(foundElement, enkeltPris, pAntal)
     }
     else {
-        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
+        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
         regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
         regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
