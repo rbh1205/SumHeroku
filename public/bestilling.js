@@ -1,3 +1,12 @@
+var opretButton = document.getElementById('opretButton')
+var bordSelect = document.getElementById('bordNr')
+var bemærkningInput = document.getElementById('bemærkning')
+var regning = document.getElementById('regning')
+var samletPrisInput = document.getElementById('samletPris')
+var products;
+opretButton.onclick = opretHandler
+
+
 async function get(url) {
     const respons = await fetch(url);
     if (respons.status !== 200) // OK
@@ -11,7 +20,7 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 201) // Created
+    if (respons.status !== 200) // Created
         throw new Error(respons.status);
     return await respons.json();
 }
@@ -27,8 +36,7 @@ function generateProductTable(products) {
     return html;
 }
 
-var regning = document.getElementById('regning')
-var samletPrisInput = document.getElementById('samletPris')
+
 
 function samletPris(pris) {
     let samletPris = parseInt(samletPrisInput.value) + parseInt(pris);
@@ -64,19 +72,24 @@ function productHandler(event) {
     samletPris(enkeltPris)
 }
 
-var opretButton = document.getElementById('opretButton')
-var bordSelect = document.getElementById('bordNr')
-var bemærkningInput = document.getElementById('bemærkning')
-opretButton.onclick = opretHandler
 
 async function opretHandler() {
     let time = Date.now();
     let table = bordSelect.value;
     let waiter = 'Per';
-    let products = getRegning()
+    let products = JSON.stringify(getRegning());
     let price = samletPrisInput.value;
     let comment = bemærkningInput.value;
-    await post('/api/orders',{time, table, waiter, products, price, comment})
+    await post('/api/orders',{time, table, waiter, products, price, comment});
+    samletPrisInput.value = ""
+    bemærkningInput.value = ""
+    bordSelect.value = 1
+    rydRegning()
+
+}
+
+function rydRegning(){
+    regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>' ;
 }
 
 function getRegning(){
@@ -88,9 +101,6 @@ function getRegning(){
     return toReturn;
 }
     
-
-
-var products;
 async function main(url) {
     try {
         products = await get(url);
@@ -98,7 +108,7 @@ async function main(url) {
         console.log(fejl);
     }
     document.getElementById('produkter').innerHTML = generateProductTable(products);
-    console.log(products)
+    // console.log(products)
     let trs = document.querySelectorAll('tr');
     for (tr of trs)
         if (tr.id != 'theader')
