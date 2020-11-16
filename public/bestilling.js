@@ -84,11 +84,12 @@ async function opretHandler() {
     samletPrisInput.value = ""
     bemærkningInput.value = ""
     bordSelect.value = 1
+    rydRegning()
 
 }
 
 function rydRegning(){
-    
+    regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>' ;
 }
 
 function getRegning(){
