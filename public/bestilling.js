@@ -63,8 +63,6 @@ function samletPris() {
     samletPrisInput.value = samletPris
 }
 
-let linjeID = 1;
-
 
 function productHandler(event) {
     let pAntal;
@@ -86,20 +84,12 @@ function productHandler(event) {
     enkeltPris = parseInt(pPris)
     if (found) {
         addSalgslinje(foundElement, enkeltPris, pAntal)
-        // regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
-        // regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
     else {
-        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button id="buttonNr' + linjeID + '">X</button></td></tr>')
-        linjeID++
-        // document.getElementById('buttonNr' + linjeID).addEventListener('click', sletSalgslinje)
-        // document.getElementById('inputNr' + linjeID).addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
+        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6" id="inputNr' + linjeID + '"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
         regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
         regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
-    // regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
-    // regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
-
     samletPris()
 }
 
