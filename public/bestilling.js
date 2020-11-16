@@ -3,7 +3,12 @@ var bordSelect = document.getElementById('bordNr')
 var bemærkningInput = document.getElementById('bemærkning')
 var regning = document.getElementById('regning')
 var samletPrisInput = document.getElementById('samletPris')
+var bordeKnap = document.getElementById('hentborde')
+var annullerKnap = document.getElementById('annuller')
+var close = document.getElementById('close')
+var modal = document.getElementById('bordeModal')
 var products;
+
 opretButton.onclick = opretHandler
 
 
@@ -36,7 +41,16 @@ function generateProductTable(products) {
     return html;
 }
 
-
+function generateBestillingTable(orders) {
+    let html = '<table id="orders"><tr id="theader"><th>Bord nr</th><th>Samlet pris</th></tr>'
+    for (order of orders) {
+        html += '<tr><td>' +order.table + 
+            '</td><td>' + order.price +
+            '</td></tr>\n';
+    }
+    html += '</table>';
+    return html; 
+}
 
 function samletPris(pris) {
     let samletPris = parseInt(samletPrisInput.value) + parseInt(pris);
@@ -115,3 +129,26 @@ async function main(url) {
             tr.onclick = productHandler;
 }
 main('/api/products');
+
+
+async function jeppesFunkion(url) {
+    try {
+        orders = await get(url); 
+    } catch (fejl){
+        console.log(fejl); 
+    }
+    document.getElementById('orders').innerHTML = generateBestillingTable(orders);
+    let trs = document.querySelectorAll('tr');
+    for (tr of trs) 
+        if (tr.id != 'theader')
+            tr.onclick = orderHandler; 
+}
+jeppesFunkion('/api/orders')
+
+annullerKnap.onclick = function () {
+    modal.style.display = "none"
+}
+
+bordeKnap.onclick = function () {
+    modal.style.display = "block"
+}
