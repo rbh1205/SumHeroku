@@ -1,3 +1,12 @@
+var opretButton = document.getElementById('opretButton')
+var bordSelect = document.getElementById('bordNr')
+var bemærkningInput = document.getElementById('bemærkning')
+var regning = document.getElementById('regning')
+var samletPrisInput = document.getElementById('samletPris')
+var products = document.getElementById('produkter');
+opretButton.onclick = opretHandler
+
+
 async function get(url) {
     const respons = await fetch(url);
     if (respons.status !== 200) // OK
@@ -27,8 +36,7 @@ function generateProductTable(products) {
     return html;
 }
 
-var regning = document.getElementById('regning')
-var samletPrisInput = document.getElementById('samletPris')
+
 
 function samletPris(pris) {
     let samletPris = parseInt(samletPrisInput.value) + parseInt(pris);
@@ -64,10 +72,6 @@ function productHandler(event) {
     samletPris(enkeltPris)
 }
 
-var opretButton = document.getElementById('opretButton')
-var bordSelect = document.getElementById('bordNr')
-var bemærkningInput = document.getElementById('bemærkning')
-opretButton.onclick = opretHandler
 
 async function opretHandler() {
     let time = Date.now();
@@ -88,16 +92,13 @@ function getRegning(){
     return toReturn;
 }
     
-
-
-var products;
 async function main(url) {
     try {
         products = await get(url);
     } catch (fejl) {
         console.log(fejl);
     }
-    document.getElementById('produkter').innerHTML = generateProductTable(products);
+    products.innerHTML = generateProductTable(products);
     console.log(products)
     let trs = document.querySelectorAll('tr');
     for (tr of trs)
