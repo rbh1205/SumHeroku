@@ -2,21 +2,21 @@ require('should');
 const request = require('supertest');
 const controller = require("../controller/controller");
 const app = require('../app.js');
-const { response } = require ('..app.js');
+const { response } = require ('../app.js');
 
 //Integrationstest af produkter
 describe('integration test - promise', function () {
     
     it("get('/') test", function (){
-        return request
+        return request(app)
             .get('/')
             .expect(200)
             .expect('Content-Type', /html/);
     });
 
-    it("get('/Order') test", async () => {
+    it("get('/order') test", async () => {
         let response = await request(app)
-            .get('/product')
+            .get('/order')
             .expect(200)
             .expect('Content-Type', /json/);
         response.body.length.should.be.greaterThanOrEqual(1); 
