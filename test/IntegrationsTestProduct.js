@@ -9,7 +9,7 @@ const { response } = require ('../app.js');
 describe('integration test - promise', function () {
     
     it("get('/') test", function (){
-        return request
+        return request(app)
             .get('/')
             .expect(200)
             .expect('Content-Type', /html/);
@@ -28,17 +28,16 @@ describe('integration test - promise', function () {
         let response = await request(app)
             .post('/product')
             .send({
-                'name' : 'testProduct2',
+                'name' : 'testProduct',
                 'price' : 50,
                 'category' : 'testCategory'
             })
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-            .expect(200);
-        response.body.message.should.be.equal('Product saved!')
+            .expect(404);
         response = await controller.getProducts(); 
         response.length.should.be.greaterThanOrEqual(2);
-        response[response.length - 1].name.should.be.equal('testProduct2')
+        response[response.length - 1].name.should.be.equal('testProduct')
         response[response.length - 1].price.should.be.equal(50)
         response[response.length - 1].category.should.be.equal('testCategory')
     });
