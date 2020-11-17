@@ -1,8 +1,5 @@
 require('should');
-<<<<<<< HEAD
 const request = require('supertest');
-=======
->>>>>>> Ulrik
 const controller = require("../controller/controller");
 
 //test af Controller test funktioner
