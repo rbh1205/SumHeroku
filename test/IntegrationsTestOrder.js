@@ -2,7 +2,7 @@ require('should');
 const request = require('supertest');
 const controller = require("../controller/controller");
 const app = require('../app.js');
-const { response } = require ('..app.js');
+const { response } = require ('../app.js');
 
 //Integrationstest af produkter
 describe('integration test - promise', function () {

@@ -1,5 +1,5 @@
 require('should');
-const request = require('superagent');
+const request = require('supertest');
 const controller = require("../controller/controller");
 
 //test af Controller test funktioner
