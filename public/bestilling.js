@@ -170,9 +170,9 @@ async function jeppesFunkion(url) {
     let table = document.getElementById('orders');
     table.innerHTML = generateBestillingTable(orders);
     
-    console.log(table.childNodes.children)
+    // console.log(table.childNodes.children)
 
-    let trs = document.querySelectorAll('tr');
+    // let trs = document.querySelectorAll('tr');
     
     // console.log(trs)
     // for (tr of trs) 
