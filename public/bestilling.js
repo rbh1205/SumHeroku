@@ -9,6 +9,7 @@ var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
 var modal = document.getElementById('bordeModal')
 var products;
+var orderTable;
 
 opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
@@ -44,13 +45,12 @@ function generateProductTable(products) {
 }
 
 function generateBestillingTable(orders) {
-    let html = '<table id="orders"><tr id="theader"><th>Bord nr</th><th>Samlet pris</th></tr>'
+    let html = ''
     for (order of orders) {
-        html += '<tr><td>' + order.table +
+        html += '<tr id=' + order._id + '><td>' + order.table +
             '</td><td>' + order.price +
             '</td></tr>\n';
     }
-    html += '</table>';
     return html;
 }
 
@@ -168,7 +168,11 @@ async function jeppesFunkion(url) {
         console.log(fejl);
     }
     let table = document.getElementById('orders');
-    table.innerHTML = generateBestillingTable(orders);
+    table.insertAdjacentHTML('beforeend',generateBestillingTable(orders));
+    // console.log(Array.from(table.children[1].children))
+    // Array.from(table.children[1].children).forEach(element => {
+    //     element.addEventListener('click', editOrderHandler)
+    // });
 
     // console.log(table.childNodes.children)
 
@@ -180,6 +184,18 @@ async function jeppesFunkion(url) {
     // tr.onclick = console.log(tr.innerHTML); 
 }
 jeppesFunkion('/api/orders')
+
+async function editOrderHandler(event) {
+    // let id = event.currentTarget.parentElement.id
+    // let orderToEdit;
+    // for (order of orders) {
+    //     if (order._id === id) {
+    //         orderToEdit = order
+    //     }
+    // }
+console.log("testorder")
+
+}
 
 annullerKnap.onclick = function () {
     modal.style.display = "none"
