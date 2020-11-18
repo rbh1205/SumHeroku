@@ -21,9 +21,11 @@ router
             }
         }
     )
-    .delete('/:productName', async (request, response) => {
+    .delete('/:id', async (request, response) => {
+        // console.log(request.params.id)
+        response.send(request.params.id)
         try {
-            await controller.deleteProduct(request.params.productName);
+            await controller.deleteProduct(request.params.id);
             response.send({message: 'Product deleted!'});
         } catch (e) {
             sendStatus(e, response);

@@ -21,8 +21,9 @@ exports.getProducts = function () {
     return Product.find().populate('product').exec();
 };
 
-exports.deleteProduct = async function (productName) {
-    return await Product.deleteOne().where('name').eq(productName).exec()
+exports.deleteProduct = async function (productId) {
+    console.log(productId)
+    return await Product.deleteOne().where('name').eq(productId).exec()
 };
 
 exports.createOrder = function (time, table, waiter, products, price, comment) {

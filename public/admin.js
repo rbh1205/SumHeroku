@@ -80,27 +80,36 @@ function insertProductRow(product) {
     // Create an empty <tr> element and add it to the last position of the table
     var row = productTable.insertRow();
 
-    // Insert new cells (<td> elements) at the 1st, 2nd and 3rd position of the "new" <tr> element:
-    var nameCell = row.insertCell(0);
-    var priceCell = row.insertCell(1);
-    var catagoryCell = row.insertCell(2);
+    /** 
+     * Inserts three new cells (<td> elements)
+     * at the 1st, 2nd and 3rd position of the "new" <tr> element
+     * and adds data to the new cells
+    */
+    var data = [product.name, product.price, product.category];
+    for (let i = 0; i < 3; i++) {
+        let cell = row.insertCell(i);
+        cell.innerHTML = data[i];
+        cell.contentEditable = 'true';
+    }
 
     var okCell = row.insertCell(3);
     var deleteCell = row.insertCell(4);
+    okCell.innerHTML = 'OK';
+    deleteCell.innerHTML = 'SLET';
 
-    // Adds data to the new cells:
-    nameCell.innerHTML = product.name;
-    priceCell.innerHTML = product.price;
-    catagoryCell.innerHTML = product.category;
-
-    okCell.innerHTML = 
-
-    // Adds onclick-handler on the row
-    row.onclick = () => productHandler(product);
+    okCell.onclick = () => updateProduct(product, [row.children[0].innerHTML, row.children[1].innerHTML, row.children[2].innerHTML]);
+    deleteCell.onclick = () => deleteProduct(product);
 }
 
-function productHandler(product){
-    console.log(product)
+function updateProduct(product, data) {
+    console.log(product, data)
+}
+
+async function deleteProduct(product) {
+    console.log(await deLete(`/api/products/${product._id}`))
+    products.splice(products.indexOf(product), 1)
+    console.log('Produkt slettet', product)
+    console.log(products)
 }
 
 
@@ -118,6 +127,15 @@ async function post(url, objekt) {
 
 async function get(url) {
     const respons = await fetch(url);
+    if (respons.status !== 200) // OK
+        throw new Error(respons.status);
+    return await respons.json();
+}
+
+async function deLete(url) {
+    let respons = await fetch(url, {
+        method: "DELETE"
+    });
     if (respons.status !== 200) // OK
         throw new Error(respons.status);
     return await respons.json();
