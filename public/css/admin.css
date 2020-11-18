@@ -7,20 +7,20 @@ body {font-family: Arial;}
     margin: 10px;
 }
 
-#dagenssalg {
+table {
     border-collapse: collapse;
 }
 
-#dagenssalg td, #dagenssalg th {
+table td, table th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#dagenssalg tr:nth-child(even){background-color: #f2f2f2;}
+table tr:nth-child(even){background-color: #f2f2f2;}
 
-#dagenssalg tr:hover {background-color: #ddd;}
+table tr:hover {background-color: #ddd;}
 
-#dagenssalg th {
+table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
@@ -61,13 +61,19 @@ body {font-family: Arial;}
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    max-width: 200px;    
+    max-width: fit-content;    
     display: grid;
 }
 
 .ændreModal-content * {
     margin: 2px;
 }
+
+#produktTable{
+    overflow-y:scroll;
+    height:300px;
+    display:block;
+ }
 
 /* The Close Button */
 .close {

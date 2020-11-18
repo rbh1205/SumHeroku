@@ -3,7 +3,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product')
 const config = require('../config');
 
-mongoose.connect(config.databaseURI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 exports.createProduct = function (name, price, category) {
     return Product.create({
