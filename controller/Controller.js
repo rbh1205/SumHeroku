@@ -44,6 +44,10 @@ exports.getOrders = function () {
     return Order.find().populate('order').exec();
 };
 
+exports.updateOrder = function (id, products, price, comment) {
+    return Order.findByIdAndUpdate({ id }, { products, price, comment })
+}
+
 exports.deleteOrder = async function (order) {
     return await Order.deleteOne().where('_id').eq(order._id).exec()
 };

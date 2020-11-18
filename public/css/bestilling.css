@@ -34,6 +34,10 @@ body {font-family: Arial;}
 #theader tr:nth-child(even){background-color: #9e9d9d;}
 #theader tr:hover {background-color: #ddd;}
 
+#editModalDiv{
+    max-width: fit-content;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
