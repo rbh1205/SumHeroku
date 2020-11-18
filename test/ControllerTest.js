@@ -1,22 +1,25 @@
 require('should');
 const request = require('supertest');
 const controller = require("../controller/controller");
+let tid = Date.now(); 
 
 //test af Controller test funktioner
 describe('controller test - promise', function () {
+
+
+    it('createProduct() test', async () => {
+        let product = await controller.createProduct('testCreateProduct', 100, 'testProductCategory');
+        product.name.should.be.equal('testCreateProduct');
+        product.price.should.be.equal(100);
+        product.category.should.be.equal('testProductCategory');
+    });
+
     it('getProducts() test', async () => {
         let products = await controller.getProducts(); 
         products.length.should.be.greaterThanOrEqual(1); 
-        products[0].name.should.be.equal('Banan');
-        products[0].price.should.be.equal(3);
-        products[0].category.should.be.equal('Madvarer');
-    });
-
-    it('createProduct() test', async () => {
-        let product = await controller.createProduct('testCreateProduct', 100, 'testCreateCategory');
-        product.name.should.be.equal('testCreateProduct');
-        product.price.should.be.equal(100);
-        product.category.should.be.equal('testCreateCategory');
+        products[0].name.should.be.equal('testCreateProduct');
+        products[0].price.should.be.equal(100);
+        products[0].category.should.be.equal('testProductCategory');
     });
 
     // it('deleteProduct() test', async () => {
@@ -29,26 +32,28 @@ describe('controller test - promise', function () {
     // })
 
 
-    it('getOrders() test', async () => {
-        let orders = await controller.getOrders(); 
-        orders.length.should.be.greaterThanOrEqual(1); 
-        orders[0].time.should.be.equal('1605516075894');
-        orders[0].table.should.be.equal('1');
-        orders[0].waiter.should.be.equal('Per');
-        orders[0].products.length.should.be.greaterThanOrEqual(1); 
-        orders[0].price.should.be.equal(540); 
-        orders[0].comment.should.be.equal('')
-    });
-    
     it('createOrder() test', async () => {
-        let order = await controller.createOrder('10:10', '1', 'Kim', ['test', 'test2'], 100, 'testComment')
-        order.time.should.be.equal('10:10');
+        let order = await controller.createOrder(tid, '1', 'Kim', 'test1', 100, 'testComment')
+        order.time.should.be.equal(tid);
         order.table.should.be.equal('1');
-        order.waiter.should.be.equal('Kim');
-        order.products.length.should.be.equal(2); 
+        order.waiter.should.be.equal('Kim'); 
+        order.products.should.be.equal('test1')
         order.price.should.be.equal(100);
         order.comment.should.be.equal('testComment')
     });
+
+    it('getOrders() test', async () => {
+        let orders = await controller.getOrders(); 
+        orders.length.should.be.greaterThanOrEqual(1); 
+        orders[0].time.should.be.equal(tid);
+        orders[0].table.should.be.equal('1');
+        orders[0].waiter.should.be.equal('Kim');
+        orders[0].products.length.should.be.greaterThanOrEqual(1); 
+        orders[0].price.should.be.equal(100); 
+        orders[0].comment.should.be.equal('testComment')
+    });
+    
+   
 
     it('deleteOrder() test', async () => {
         let order2 = await controller.createOrder('11:11', '2', 'Lars', ['test', 'test2'], 150, 'testComment')
