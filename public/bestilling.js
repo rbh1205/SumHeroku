@@ -1,3 +1,5 @@
+const { clear } = require("console")
+
 var opretButton = document.getElementById('opretButton')
 var rydButton = document.getElementById('rydButton')
 var bordSelect = document.getElementById('bordNr')
@@ -66,6 +68,9 @@ function samletPris() {
 function lavRabatProcent() {
     let pris = Number(document.getElementById('samletPris').value);
     let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
+    if (rabatProcent.value > 100) {
+        document.getElementById('fejlRabat'.innerHTML = 'Fejl, må ikke være over 100%')
+    }
     let total = pris - (pris * rabatProcent);
     document.getElementById('samletPris').value = total;
 }
@@ -73,8 +78,11 @@ function lavRabatProcent() {
 function lavRabatKroner() {
     let pris = Number(document.getElementById('samletPris').value);
     let rabatKroner = Number(document.getElementById('rabatKroner').value);
-    let total2 = pris - rabatKroner;
-    document.getElementById('samletPris').value = total2;
+    if (rabatKroner < pris) {
+
+    }
+    let total = pris - rabatKroner;
+    document.getElementById('samletPris').value = total;
 }
 
 function productHandler(event) {
