@@ -111,8 +111,8 @@ function addSalgslinje(element, pris, antal) {
     samletPris()
 }
 function sletSalgslinje(event) {
-    console.log("test")
     event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
+    samletPris()
 }
 
 
@@ -134,6 +134,7 @@ async function opretHandler() {
 
 function rydRegning() {
     regning.innerHTML = '<tr><th>Beskrivelse</th><th>Antal</th><th>Pris</th></tr>';
+    samletPrisInput.value = 0
 }
 
 function getRegning() {
