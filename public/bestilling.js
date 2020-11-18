@@ -1,3 +1,5 @@
+const { clear } = require("console")
+
 var opretButton = document.getElementById('opretButton')
 var rydButton = document.getElementById('rydButton')
 var bordSelect = document.getElementById('bordNr')
@@ -63,6 +65,25 @@ function samletPris() {
     samletPrisInput.value = samletPris
 }
 
+function lavRabatProcent() {
+    let pris = Number(document.getElementById('samletPris').value);
+    let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
+    if (rabatProcent.value > 100) {
+        document.getElementById('fejlRabat'.innerHTML = 'Fejl, må ikke være over 100%')
+    }
+    let total = pris - (pris * rabatProcent);
+    document.getElementById('samletPris').value = total;
+}
+
+function lavRabatKroner() {
+    let pris = Number(document.getElementById('samletPris').value);
+    let rabatKroner = Number(document.getElementById('rabatKroner').value);
+    if (rabatKroner < pris) {
+
+    }
+    let total = pris - rabatKroner;
+    document.getElementById('samletPris').value = total;
+}
 
 function productHandler(event) {
     let pAntal;
@@ -125,6 +146,7 @@ async function opretHandler() {
     let price = samletPrisInput.value;
     let comment = bemærkningInput.value;
     await post('/api/orders', { time, table, waiter, products, price, comment });
+    printRegning(time,table,waiter,price,comment)
     samletPrisInput.value = ""
     bemærkningInput.value = ""
     bordSelect.value = 1
@@ -141,7 +163,7 @@ function getRegning() {
     let toReturn = [];
     for (let i = 1; i < regning.children.length; i++) {
         let j = regning.children[i].children[0];
-        toReturn.push({ name: j.children[0].innerHTML, amount: j.children[1].innerHTML, price: j.children[2].innerHTML })
+        toReturn.push({ name: j.children[0].innerHTML, amount: j.children[1].children[0].value, price: j.children[2].innerHTML })
     }
     return toReturn;
 }
@@ -203,4 +225,16 @@ annullerKnap.onclick = function () {
 
 bordeKnap.onclick = function () {
     modal.style.display = "block"
+}
+
+function printRegning(time,table,waiter,price,comment) {
+    let bong = getRegning()
+    console.log('bord ' + table + ' ' + 'tid: ' + time);
+    for (let i = 0; i < bong.length; i++) {
+        console.log('Name: ' + bong[i].name + ' ' + 'Amount: ' + bong[i].amount + ' ' +'Price: ' + bong[i].price)
+    }
+    console.log('kommentar: ' + comment)
+    console.log('Total: ' + price + 'DK' );
+    console.log('din dejlige tjener: ' + waiter);
+ 
 }

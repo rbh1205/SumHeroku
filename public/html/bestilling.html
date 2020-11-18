@@ -25,6 +25,7 @@
             </tr>
         </table>
         <br>
+        <label for='samletPris'>Pris</label>
         <input type='text' id='samletPris' value=0></input>
         <button id='opretButton'>Opret</button>
         <button id='rydButton'>Ryd</button>
@@ -36,6 +37,20 @@
         </select>
         <label for='bemærkning'>Bemærkning</label>
         <input type='text' id='bemærkning' value=''></input>
+        <br><br>
+        <div></div>
+        <h3>Rabat</h3>
+        <label for='rabatProcent'>Procent</label>
+        <input type='text' id ='rabatProcent' value=''></input>
+        <button onclick="lavRabatProcent()">Udregn</button>
+        <label for='fejlRabat'></label>
+        <br><br>
+        <label for='rabatKroner'>Kroner</label>
+        <input type='text' id ='rabatKroner' value=''></input>
+        <button onclick="lavRabatKroner()">Udregn</button>
+        <br>
+        <label id='fejlRabat'></label>
+    </div>
         <div id="bordeModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
