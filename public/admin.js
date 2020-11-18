@@ -97,14 +97,24 @@ function insertProductRow(product) {
 
     // Sets onclick for update and delete cells
     okCell.onclick = () => {
-        productTable.
-        updateProduct(product, [row.children[0].innerHTML, row.children[1].innerHTML, row.children[2].innerHTML]);
+        updateProduct(product, row.innerText);
     }
-    deleteCell.onclick = () => deleteProduct(product);
+    deleteCell.onclick = () => {
+        row.parentNode.removeChild(row)
+        deleteProduct(product);
+    }
 }
 
-function updateProduct(product, data) {
-    console.log(product, data)
+function updateProduct(product, inputData) {
+    let data = inputData.split(/\s/).splice(0,3)
+
+    let p = {
+        name : data[0],
+        price: parseInt(data[1]),
+        catagory: data[2]
+    }
+
+    console.log(product, data, p)
 }
 
 async function deleteProduct(product) {

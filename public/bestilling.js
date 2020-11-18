@@ -11,7 +11,7 @@ var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
 var closeElements = document.querySelectorAll("#close");
 var gemKnap = document.getElementById('saveButton')
-let editOrderTable = document.getElementById('editOrder');
+var editOrderTable = document.getElementById('editOrder');
 var editButtons;
 var products;
 var orderTable;
