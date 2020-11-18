@@ -46,12 +46,12 @@ function generateProductTable(products) {
 function generateBestillingTable(orders) {
     let html = '<table id="orders"><tr id="theader"><th>Bord nr</th><th>Samlet pris</th></tr>'
     for (order of orders) {
-        html += '<tr><td>' +order.table + 
+        html += '<tr><td>' + order.table +
             '</td><td>' + order.price +
             '</td></tr>\n';
     }
     html += '</table>';
-    return html; 
+    return html;
 }
 
 function samletPris() {
@@ -86,7 +86,7 @@ function productHandler(event) {
         addSalgslinje(foundElement, enkeltPris, pAntal)
     }
     else {
-        regning.insertAdjacentHTML('beforeend','<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
+        regning.insertAdjacentHTML('beforeend', '<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
         regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
         regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
     }
@@ -152,7 +152,6 @@ async function main(url) {
         console.log(fejl);
     }
     document.getElementById('produkter').innerHTML = generateProductTable(products);
-    // console.log(products)
     let trs = document.querySelectorAll('tr');
     for (tr of trs)
         if (tr.id != 'theader')
@@ -163,21 +162,21 @@ main('/api/products');
 
 async function jeppesFunkion(url) {
     try {
-        orders = await get(url); 
-    } catch (fejl){
-        console.log(fejl); 
+        orders = await get(url);
+    } catch (fejl) {
+        console.log(fejl);
     }
     let table = document.getElementById('orders');
     table.innerHTML = generateBestillingTable(orders);
-    
+
     // console.log(table.childNodes.children)
 
     // let trs = document.querySelectorAll('tr');
-    
+
     // console.log(trs)
     // for (tr of trs) 
     //     if (tr.id != 'theader')
-            // tr.onclick = console.log(tr.innerHTML); 
+    // tr.onclick = console.log(tr.innerHTML); 
 }
 jeppesFunkion('/api/orders')
 
