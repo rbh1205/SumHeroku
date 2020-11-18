@@ -63,6 +63,19 @@ function samletPris() {
     samletPrisInput.value = samletPris
 }
 
+function lavRabatProcent() {
+    let pris = Number(document.getElementById('samletPris').value);
+    let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
+    let total = pris - (pris * rabatProcent);
+    document.getElementById('samletPris').value = total;
+}
+
+function lavRabatKroner() {
+    let pris = Number(document.getElementById('samletPris').value);
+    let rabatKroner = Number(document.getElementById('rabatKroner').value);
+    let total2 = pris - rabatKroner;
+    document.getElementById('samletPris').value = total2;
+}
 
 function productHandler(event) {
     let pAntal;
