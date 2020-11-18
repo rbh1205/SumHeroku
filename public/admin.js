@@ -1,22 +1,13 @@
-const { KeyObject } = require("crypto");
-
 // const controller = require("../controller/controller");
 var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
-
 var openModalBtns = document.getElementsByClassName("openModal");
-var opretModalBtn = document.getElementById("opretBtn");
-var ændreModalBtn = document.getElementById("ændreBtn");
-
 var closeElements = document.querySelectorAll("#close");
 var opretBtn = document.getElementById('opret')
 var inputs = document.querySelectorAll('input');
-var products;
-
-// console.log(modals)
-// console.log(openModalBtns)
-
+var productTable = document.getElementById('produktTable')
+var products = [];
 
 async function initialize() {
     try {
@@ -25,7 +16,6 @@ async function initialize() {
         console.log(fejl);
     }
 }
-initialize();
 
 for (let i = 0; i < openModalBtns.length; i++) {
     openModalBtns[i].onclick = () => {
@@ -45,9 +35,8 @@ for (e of closeElements) {
 window.onclick = (event) => closeModals(event);
 document.body.addEventListener('keyup', (event) => closeModals(event))
 function closeModals(event) {
-    if (event.target == opretModal || event.key == 'Escape') {
+    if (event.target == opretModal || event.target == ændreModal || event.key == 'Escape') {
         opretModal.style.display = "none";
-    } else if (event.target == ændreModal || event.key == 'Escape') {
         ændreModal.style.display = "none";
     }
 }
@@ -56,6 +45,7 @@ opretBtn.onclick = async function () {
     let name = inputs[0].value;
     let price = parseInt(inputs[1].value);
     let category = inputs[2].value;
+
     try {
         if (!name) throw 'Indtast korrekt navn på produktet'
         if (!category) throw 'Indtast korrekt kategori på produktet'
@@ -64,6 +54,7 @@ opretBtn.onclick = async function () {
         alert(err)
         return;
     }
+
     let product = {
         name,
         price,
@@ -75,8 +66,42 @@ opretBtn.onclick = async function () {
 
     await post('/api/products/', product);
     console.log('Produkt oprettet', product);
+    products.push(product)
+    insertProductRow(product)
 }
 
+function createProductTable() {
+    for (const p of products) {
+        insertProductRow(p)
+    }
+}
+
+function insertProductRow(product) {
+    // Create an empty <tr> element and add it to the last position of the table
+    var row = productTable.insertRow();
+
+    // Insert new cells (<td> elements) at the 1st, 2nd and 3rd position of the "new" <tr> element:
+    var nameCell = row.insertCell(0);
+    var priceCell = row.insertCell(1);
+    var catagoryCell = row.insertCell(2);
+
+    var okCell = row.insertCell(3);
+    var deleteCell = row.insertCell(4);
+
+    // Adds data to the new cells:
+    nameCell.innerHTML = product.name;
+    priceCell.innerHTML = product.price;
+    catagoryCell.innerHTML = product.category;
+
+    okCell.innerHTML = 
+
+    // Adds onclick-handler on the row
+    row.onclick = () => productHandler(product);
+}
+
+function productHandler(product){
+    console.log(product)
+}
 
 
 
@@ -97,3 +122,9 @@ async function get(url) {
         throw new Error(respons.status);
     return await respons.json();
 }
+
+async function main() {
+    await initialize();
+    createProductTable();
+}
+main();
