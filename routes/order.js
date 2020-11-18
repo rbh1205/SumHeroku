@@ -11,30 +11,42 @@ router
             sendStatus(e, response);
         }
     })
-    
-    
+
+
     .post('/', async (request, response) => {
-            try {
-                let {time, table, waiter, products, price, comment} = request.body;
-                await controller.createOrder(time, table, waiter, products, price, comment);
-                response.send({message: 'Order saved!'});
-            } catch (e) {
-                sendStatus(e, response);
-            }
-            // response.sendStatus(201)
+        try {
+            let { time, table, waiter, products, price, comment } = request.body;
+            await controller.createOrder(time, table, waiter, products, price, comment);
+            response.send({ message: 'Order saved!' });
+        } catch (e) {
+            sendStatus(e, response);
         }
+        // response.sendStatus(201)
+    }
+    )
+    .post('/update/:orderID', async (request, response) => {
+        try {
+            let {products, price, comment} = request.body;
+            await controller.updateOrder(request.params.orderID, products, price, comment);
+            response.send({ message: 'Order saved!' });
+            // response.sendStatus(200)
+        } catch (e) {
+            sendStatus(e, response);
+        }
+        // response.sendStatus(201)
+    }
     )
     .delete('/:orderID', async (request, response) => {
         try {
             await controller.deleteOrder(request.params.orderID)
-            response.send({message: 'Order deleted!'});
+            response.send({ message: 'Order deleted!' });
         } catch (e) {
             sendStatus(e, response);
         }
     }
-);
+    );
 
-    
+
 
 function sendStatus(e, response) {
     console.error("Exception: " + e);

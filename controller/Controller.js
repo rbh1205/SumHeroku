@@ -3,7 +3,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product')
 const config = require('../config');
 
-mongoose.connect(config.databaseURI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 exports.createProduct = function (name, price, category) {
     return Product.create({
@@ -43,6 +43,10 @@ exports.getOrder = function (orderID) {
 exports.getOrders = function () {
     return Order.find().populate('order').exec();
 };
+
+exports.updateOrder = function (id, products, price, comment) {
+    return Order.findByIdAndUpdate({ id }, { products, price, comment })
+}
 
 exports.deleteOrder = async function (order) {
     return await Order.deleteOne().where('_id').eq(order._id).exec()

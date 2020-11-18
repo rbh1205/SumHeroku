@@ -7,12 +7,24 @@ var samletPrisInput = document.getElementById('samletPris')
 var bordeKnap = document.getElementById('hentborde')
 var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
-var modal = document.getElementById('bordeModal')
+var borderModal = document.getElementById('bordeModal')
+var editModal = document.getElementById('editModal')
+var closeElements = document.querySelectorAll("#close");
+var gemKnap = document.getElementById('saveButton')
+let editOrderTable = document.getElementById('editOrder');
+var editButtons;
 var products;
 var orderTable;
 
 opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
+gemKnap.onclick = saveEditOrderHandler
+
+for (e of closeElements) {
+    e.onclick = function (event) {
+        event.currentTarget.parentElement.parentElement.style.display = "none"
+    }
+}
 
 
 async function get(url) {
@@ -28,15 +40,15 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    if (respons.status !== 200) // Created
-        throw new Error(respons.status);
+    // if (respons.status !== 200) // Created
+    //     throw new Error(respons.status);
     return await respons.json();
 }
 
 function generateProductTable(products) {
-    let html = '<table><tr id="theader"><th>Beskrivelse</th><th>Pris</th></tr>';
+    let html = '<table><tr><th>Beskrivelse</th><th>Pris</th></tr>';
     for (product of products) {
-        html += '<tr><td>' + product.name +
+        html += '<tr id="product"><td>' + product.name +
             '</td><td>' + product.price +
             '</td></tr>\n';
     }
@@ -49,7 +61,7 @@ function generateBestillingTable(orders) {
     for (order of orders) {
         html += '<tr id=' + order._id + '><td>' + order.table +
             '</td><td>' + order.price +
-            '</td></tr>\n';
+            '</td>' + '<td><button id="editButton">Edit</button></td>' + '</tr>\n';
     }
     return html;
 }
@@ -110,12 +122,11 @@ function addSalgslinje(element, pris, antal) {
     element.children[2].innerHTML = nyPris
     samletPris()
 }
+
 function sletSalgslinje(event) {
     event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
     samletPris()
 }
-
-
 
 async function opretHandler() {
     let time = Date.now();
@@ -129,7 +140,6 @@ async function opretHandler() {
     bemærkningInput.value = ""
     bordSelect.value = 1
     rydRegning()
-
 }
 
 function rydRegning() {
@@ -153,10 +163,11 @@ async function main(url) {
         console.log(fejl);
     }
     document.getElementById('produkter').innerHTML = generateProductTable(products);
-    let trs = document.querySelectorAll('tr');
+    let trs = document.querySelectorAll("#product")
+    // let trs = document.querySelectorAll('tr');
     for (tr of trs)
-        if (!tr.id)
-            tr.onclick = productHandler;
+        // if (!tr.id)
+        tr.onclick = productHandler;
 }
 main('/api/products');
 
@@ -167,30 +178,73 @@ async function jeppesFunktion(url) {
     } catch (fejl) {
         console.log(fejl);
     }
-    let table = document.getElementById('orders');
-    table.insertAdjacentHTML('beforeend',generateBestillingTable(orders));
-    Array.from(table.children[1].children).forEach(element => {
+    orderTable = document.getElementById('orders');
+    orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
+    editButtons = document.querySelectorAll('#editButton')
+    Array.from(editButtons).forEach(element => {
         element.addEventListener('click', editOrderHandler)
     });
 }
 jeppesFunktion('/api/orders')
 
+async function saveEditOrderHandler(event) {
+    let id = event.currentTarget.previousElementSibling.getAttribute("orderid")
+    let table = editOrderTable.children[2]
+    let products = [];
+    // console.log(table)
+    // console.log(table.children[1].children[1].children[0].value)
+    // console.log(table.children[1].children[2].innerHTML)
+    for(let i = 1; i < table.children.length; i++){
+        // console.log("test")
+        // console.log({name: table.children[i].children[0].innerHTML, amount:table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
+       products.push({name: table.children[i].children[0].innerHTML, amount:table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
+    }
+    let object = {products, price: "500",comment: "123"}
+    console.log(products)
+    await post('/api/orders/update/'+id, object)
+
+}
+
 async function editOrderHandler(event) {
-    let id = event.currentTarget.id
+    editModal.style.display = "block"
+    let id = event.currentTarget.parentElement.parentElement.id
     let orderToEdit;
     for (order of orders) {
         if (order._id === id) {
             orderToEdit = order
         }
     }
-console.log(id)
-console.log(orderToEdit.waiter)
+    editOrderTable.setAttribute("orderid", id)
+    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
+}
+
+function insertOrderRows(order) {
+    let html = ""
+    Array.from(JSON.parse(order.products)).forEach(element => {
+        html +=
+            "<tr><td contenteditable=true>" + element.name +
+            "</td><td><INPUT TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
+            "</td><td contenteditable=true>" + element.price + "</td></tr>"
+    });
+    html += "<tfoot><tr><td>Samlet pris</td><td contenteditable=true>" + order.price + "</td></tr></tfoot>"
+    return html
 }
 
 annullerKnap.onclick = function () {
-    modal.style.display = "none"
+    borderModal.style.display = "none"
 }
 
 bordeKnap.onclick = function () {
-    modal.style.display = "block"
+    borderModal.style.display = "block"
+}
+
+window.onclick = function (event) {
+    if (event.target == borderModal) {
+        borderModal.style.display = "none";
+    }
+    if (event.target == editModal) {
+        editModal.style.display = "none";
+        borderModal.style.display = "block";
+    }
 }
