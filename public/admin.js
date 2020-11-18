@@ -106,13 +106,11 @@ function updateProduct(product, data) {
 }
 
 async function deleteProduct(product) {
-    console.log(await deLete(`/api/products/${product._id}`))
+    console.log(await deLete(`/api/products/${product._id}/`))
     products.splice(products.indexOf(product), 1)
-    console.log('Produkt slettet', product)
-    console.log(products)
+    // console.log('Produkt slettet', product)
+    // console.log(products)
 }
-
-
 
 async function post(url, objekt) {
     const respons = await fetch(url, {
@@ -145,4 +143,5 @@ async function main() {
     await initialize();
     createProductTable();
 }
+
 main();

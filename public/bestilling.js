@@ -1,5 +1,3 @@
-const { clear } = require("console")
-
 var opretButton = document.getElementById('opretButton')
 var rydButton = document.getElementById('rydButton')
 var bordSelect = document.getElementById('bordNr')

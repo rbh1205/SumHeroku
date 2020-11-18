@@ -22,8 +22,6 @@ router
         }
     )
     .delete('/:id', async (request, response) => {
-        // console.log(request.params.id)
-        response.send(request.params.id)
         try {
             await controller.deleteProduct(request.params.id);
             response.send({message: 'Product deleted!'});

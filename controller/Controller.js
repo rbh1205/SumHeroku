@@ -22,7 +22,6 @@ exports.getProducts = function () {
 };
 
 exports.deleteProduct = async function (productId) {
-    console.log(productId)
     return await Product.deleteOne().where('name').eq(productId).exec()
 };
 
