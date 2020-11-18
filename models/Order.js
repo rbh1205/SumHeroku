@@ -6,7 +6,7 @@ const order = new mongoose.Schema({
     table: String,
     waiter: String,
     products: String,
-    price: String,
+    price: Number,
     comment: String
 });
 

@@ -21,7 +21,7 @@ exports.getProducts = function () {
     return Product.find().populate('product').exec();
 };
 
-exports.deleteProduct(productName) = async function () {
+exports.deleteProduct = async function (productName) {
     return await Product.deleteOne().where('name').eq(productName).exec()
 };
 
@@ -44,7 +44,7 @@ exports.getOrders = function () {
     return Order.find().populate('order').exec();
 };
 
-exports.deleteOrder(order) = async function () {
+exports.deleteOrder = async function (order) {
     return await Order.deleteOne().where('_id').eq(order._id).exec()
 };
 
