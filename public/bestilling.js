@@ -155,13 +155,13 @@ async function main(url) {
     document.getElementById('produkter').innerHTML = generateProductTable(products);
     let trs = document.querySelectorAll('tr');
     for (tr of trs)
-        if (tr.id != 'theader')
+        if (!tr.id)
             tr.onclick = productHandler;
 }
 main('/api/products');
 
 
-async function jeppesFunkion(url) {
+async function jeppesFunktion(url) {
     try {
         orders = await get(url);
     } catch (fejl) {
@@ -169,32 +169,22 @@ async function jeppesFunkion(url) {
     }
     let table = document.getElementById('orders');
     table.insertAdjacentHTML('beforeend',generateBestillingTable(orders));
-    // console.log(Array.from(table.children[1].children))
-    // Array.from(table.children[1].children).forEach(element => {
-    //     element.addEventListener('click', editOrderHandler)
-    // });
-
-    // console.log(table.childNodes.children)
-
-    // let trs = document.querySelectorAll('tr');
-
-    // console.log(trs)
-    // for (tr of trs) 
-    //     if (tr.id != 'theader')
-    // tr.onclick = console.log(tr.innerHTML); 
+    Array.from(table.children[1].children).forEach(element => {
+        element.addEventListener('click', editOrderHandler)
+    });
 }
-jeppesFunkion('/api/orders')
+jeppesFunktion('/api/orders')
 
 async function editOrderHandler(event) {
-    // let id = event.currentTarget.parentElement.id
-    // let orderToEdit;
-    // for (order of orders) {
-    //     if (order._id === id) {
-    //         orderToEdit = order
-    //     }
-    // }
-console.log("testorder")
-
+    let id = event.currentTarget.id
+    let orderToEdit;
+    for (order of orders) {
+        if (order._id === id) {
+            orderToEdit = order
+        }
+    }
+console.log(id)
+console.log(orderToEdit.waiter)
 }
 
 annullerKnap.onclick = function () {
