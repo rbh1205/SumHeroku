@@ -1,4 +1,3 @@
-// const controller = require("../controller/controller");
 var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
@@ -80,11 +79,9 @@ function insertProductRow(product) {
     // Create an empty <tr> element and add it to the last position of the table
     var row = productTable.insertRow();
 
-    /** 
-     * Inserts three new cells (<td> elements)
-     * at the 1st, 2nd and 3rd position of the "new" <tr> element
-     * and adds data to the new cells
-    */
+    // Inserts three new cells (<td> elements) 
+    // at the 1st, 2nd and 3rd position of the "new" <tr> element
+    // and adds data to the new cells
     var data = [product.name, product.price, product.category];
     for (let i = 0; i < 3; i++) {
         let cell = row.insertCell(i);
@@ -92,12 +89,17 @@ function insertProductRow(product) {
         cell.contentEditable = 'true';
     }
 
+    // Creates two cells for update and delete functions
     var okCell = row.insertCell(3);
     var deleteCell = row.insertCell(4);
     okCell.innerHTML = 'OK';
     deleteCell.innerHTML = 'SLET';
 
-    okCell.onclick = () => updateProduct(product, [row.children[0].innerHTML, row.children[1].innerHTML, row.children[2].innerHTML]);
+    // Sets onclick for update and delete cells
+    okCell.onclick = () => {
+        productTable.
+        updateProduct(product, [row.children[0].innerHTML, row.children[1].innerHTML, row.children[2].innerHTML]);
+    }
     deleteCell.onclick = () => deleteProduct(product);
 }
 
