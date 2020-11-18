@@ -153,10 +153,9 @@ async function main(url) {
         console.log(fejl);
     }
     document.getElementById('produkter').innerHTML = generateProductTable(products);
-    // console.log(products)
-    let trs = document.qu
-    for (tr of produkterDiv.children.children.children)
-        if (!tr.id)
+    let trs = document.querySelectorAll('tr');
+    for (tr of trs)
+        if (tr.id != 'theader')
             tr.onclick = productHandler;
 }
 main('/api/products');

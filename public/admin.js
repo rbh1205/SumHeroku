@@ -1,12 +1,22 @@
+const { KeyObject } = require("crypto");
+
 // const controller = require("../controller/controller");
+var modals = document.getElementsByClassName("modal");
 var opretModal = document.getElementById("opretModal");
 var ændreModal = document.getElementById("ændreModal");
+
+var openModalBtns = document.getElementsByClassName("openModal");
 var opretModalBtn = document.getElementById("opretBtn");
 var ændreModalBtn = document.getElementById("ændreBtn");
+
 var closeElements = document.querySelectorAll("#close");
 var opretBtn = document.getElementById('opret')
 var inputs = document.querySelectorAll('input');
 var products;
+
+// console.log(modals)
+// console.log(openModalBtns)
+
 
 async function initialize() {
     try {
@@ -17,12 +27,10 @@ async function initialize() {
 }
 initialize();
 
-opretModalBtn.onclick = function () {
-    opretModal.style.display = "block";
-}
-
-ændreModalBtn.onclick = function () {
-    ændreModal.style.display = "block";
+for (let i = 0; i < openModalBtns.length; i++) {
+    openModalBtns[i].onclick = () => {
+        modals[i].style.display = 'block';
+    }
 }
 
 // When the user clicks on <span> (x) or annuller, close the modals
@@ -33,11 +41,13 @@ for (e of closeElements) {
     }
 }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == opretModal) {
+// When the user clicks anywhere outside of the modal or the escape button, close it
+window.onclick = (event) => closeModals(event);
+document.body.addEventListener('keyup', (event) => closeModals(event))
+function closeModals(event) {
+    if (event.target == opretModal || event.key == 'Escape') {
         opretModal.style.display = "none";
-    } else if (event.target == ændreModal) {
+    } else if (event.target == ændreModal || event.key == 'Escape') {
         ændreModal.style.display = "none";
     }
 }
