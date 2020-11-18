@@ -43,13 +43,30 @@ body {font-family: Arial;}
 }
   
 /* Modal Content */
-.modal-content {
+.opretModal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
     max-width: 200px;    
     display: grid;
+}
+
+.opretModal-content * {
+    margin: 2px;
+}
+
+.ændreModal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 200px;    
+    display: grid;
+}
+
+.ændreModal-content * {
+    margin: 2px;
 }
 
 /* The Close Button */

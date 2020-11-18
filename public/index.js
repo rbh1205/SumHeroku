@@ -47,7 +47,6 @@ bestillingTab.addEventListener('click', function(){
 function openTab(tabName) {
     $(document).ready(function () {
         $('#div1').load(tabName + '.html')
-        console.log(tabName + '.html')
     })
 }
 
