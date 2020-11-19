@@ -4,7 +4,7 @@ var ændreModal = document.getElementById("ændreModal");
 var openModalBtns = document.getElementsByClassName("openModal");
 var closeElements = document.querySelectorAll("#close");
 var opretBtn = document.getElementById('opret')
-var inputs = document.querySelectorAll('input');
+var inputData = document.getElementsByClassName('data')
 var productTable = document.getElementById('produktTable')
 var products = [];
 
@@ -27,6 +27,8 @@ for (e of closeElements) {
     e.onclick = function () {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
+        for (input of inputData)
+        input.value = '';
     }
 }
 
@@ -37,13 +39,15 @@ function closeModals(event) {
     if (event.target == opretModal || event.target == ændreModal || event.key == 'Escape') {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
+        for (input of inputData)
+        input.value = '';
     }
 }
 
 opretBtn.onclick = async function () {
-    let name = inputs[0].value;
-    let price = parseInt(inputs[1].value);
-    let category = inputs[2].value;
+    let name = inputData[0].value;
+    let price = parseInt(inputData[1].value);
+    let category = inputData[2].value;
 
     try {
         if (!name) throw 'Indtast korrekt navn på produktet'
@@ -60,7 +64,7 @@ opretBtn.onclick = async function () {
         category
     };
 
-    for (input of inputs)
+    for (input of inputData)
         input.value = '';
 
     await post('/api/products/', product);
@@ -89,6 +93,8 @@ function insertProductRow(product) {
         cell.contentEditable = 'true';
     }
 
+    
+
     // Creates two cells for update and delete functions
     var okCell = row.insertCell(3);
     var deleteCell = row.insertCell(4);
@@ -105,21 +111,20 @@ function insertProductRow(product) {
     }
 }
 
-function updateProduct(product, data) {
+async function updateProduct(product, data) {
 
     let p = {
         name: data[0],
         price: parseInt(data[1]),
-        catagory: data[2]
+        category: data[2]
     }
 
-    console.log(product, data, p)
+    console.log(await post(`/api/products/update/${product._id}`, p));
 }
 
 async function deleteProduct(product) {
     console.log(await deLete(`/api/products/${product._id}`))
     products.splice(products.indexOf(product), 1)
-    // console.log('Produkt slettet', product, products)
 }
 
 async function post(url, objekt) {

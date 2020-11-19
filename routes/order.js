@@ -26,8 +26,8 @@ router
     )
     .post('/update/:orderID', async (request, response) => {
         try {
-            let {products, price, comment} = request.body;
-           let update = await controller.updateOrder(request.params.orderID, products, price, comment);
+            let { products, price, comment } = request.body;
+            let update = await controller.updateOrder(request.params.orderID, products, price, comment);
             response.send({ message: 'Order saved!' })
         } catch (e) {
             // sendStatus(e, response);
