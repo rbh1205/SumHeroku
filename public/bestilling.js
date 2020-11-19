@@ -155,7 +155,7 @@ async function opretHandler() {
     let price = samletPrisInput.value;
     let comment = bemærkningInput.value;
     await post('/api/orders', { time, table, waiter, products, price, comment });
-    printRegning(time,table,waiter,price,comment)
+    printRegning(time, table, waiter, price, comment)
     samletPrisInput.value = ""
     bemærkningInput.value = ""
     bordSelect.value = 1
@@ -211,18 +211,13 @@ async function saveEditOrderHandler(event) {
     let id = event.currentTarget.previousElementSibling.getAttribute("orderid")
     let table = editOrderTable.children[2]
     let products = [];
-    // console.log(table)
-    // console.log(table.children[1].children[1].children[0].value)
-    // console.log(table.children[1].children[2].innerHTML)
-    for(let i = 1; i < table.children.length; i++){
-        // console.log("test")
-        // console.log({name: table.children[i].children[0].innerHTML, amount:table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
-       products.push({name: table.children[i].children[0].innerHTML, amount:table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
+    for (let i = 0; i < table.children.length; i++) {
+        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
     }
-    let object = {products, price: "500",comment: "123"}
-    console.log(products)
-    await post('/api/orders/update/'+id, object)
-
+    let productsString = JSON.stringify(products)
+    let nySamletPris = editOrderTable.children[3].children[0].children[1].innerHTML
+    let object = { products: productsString, price: nySamletPris, comment: "123" }
+    await post('/api/orders/update/' + id, object)
 }
 
 async function editOrderHandler(event) {
@@ -259,16 +254,16 @@ borderKnap.onclick = function () {
     borderModal.style.display = "block"
 }
 
-function printRegning(time,table,waiter,price,comment) {
+function printRegning(time, table, waiter, price, comment) {
     let bong = getRegning()
     console.log('bord ' + table + ' ' + 'tid: ' + time);
     for (let i = 0; i < bong.length; i++) {
-        console.log('Name: ' + bong[i].name + ' ' + 'Amount: ' + bong[i].amount + ' ' +'Price: ' + bong[i].price)
+        console.log('Name: ' + bong[i].name + ' ' + 'Amount: ' + bong[i].amount + ' ' + 'Price: ' + bong[i].price)
     }
     console.log('kommentar: ' + comment)
-    console.log('Total: ' + price + 'DK' );
+    console.log('Total: ' + price + 'DK');
     console.log('din dejlige tjener: ' + waiter);
- 
+
     borderModal.style.display = "block"
 }
 
