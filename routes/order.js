@@ -27,11 +27,10 @@ router
     .post('/update/:orderID', async (request, response) => {
         try {
             let {products, price, comment} = request.body;
-            await controller.updateOrder(request.params.orderID, products, price, comment);
-            response.send({ message: 'Order saved!' });
-            // response.sendStatus(200)
+           let update = await controller.updateOrder(request.params.orderID, products, price, comment);
+            response.send({ message: 'Order saved!' })
         } catch (e) {
-            sendStatus(e, response);
+            // sendStatus(e, response);
         }
         // response.sendStatus(201)
     }
@@ -48,11 +47,11 @@ router
 
 
 
-function sendStatus(e, response) {
-    console.error("Exception: " + e);
-    if (e.stack) console.error(e.stack);
-    response.status(500).send(e);
-}
+// function sendStatus(e, response) {
+//     console.error("Exception: " + e);
+//     if (e.stack) console.error(e.stack);
+//     response.status(500).send(e);
+// }
 
 module.exports = router;
 
