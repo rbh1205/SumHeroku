@@ -78,21 +78,25 @@ function samletPris() {
 function lavRabatProcent() {
     let pris = Number(document.getElementById('samletPris').value);
     let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
-    if (rabatProcent.value > 100) {
-        document.getElementById('fejlRabat'.innerHTML = 'Fejl, må ikke være over 100%')
-    }
-    let total = pris - (pris * rabatProcent);
+    if (document.getElementById('rabatProcent').value > 100) {
+        let fejlBesked = document.getElementById("fejlRabat");
+        fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
+    } else {
+        let total = pris - (pris * rabatProcent);
     document.getElementById('samletPris').value = total;
+    }
 }
 
 function lavRabatKroner() {
     let pris = Number(document.getElementById('samletPris').value);
     let rabatKroner = Number(document.getElementById('rabatKroner').value);
-    if (rabatKroner < pris) {
-
+    if (document.getElementById('rabatKroner').value > pris) {
+        let fejlBesked = document.getElementById("fejlRabat");
+        fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Rabat kan ikke være mere end samlet pris.</p>");
+    } else {
+        let total = pris - rabatKroner;
+        document.getElementById('samletPris').value = total;
     }
-    let total = pris - rabatKroner;
-    document.getElementById('samletPris').value = total;
 }
 
 function productHandler(event) {
