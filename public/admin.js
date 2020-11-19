@@ -28,7 +28,7 @@ for (e of closeElements) {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
         for (input of inputData)
-        input.value = '';
+            input.value = '';
     }
 }
 
@@ -40,7 +40,7 @@ function closeModals(event) {
         opretModal.style.display = "none";
         ændreModal.style.display = "none";
         for (input of inputData)
-        input.value = '';
+            input.value = '';
     }
 }
 
@@ -87,13 +87,37 @@ function insertProductRow(product) {
     // at the 1st, 2nd and 3rd position of the "new" <tr> element
     // and adds data to the new cells
     var data = [product.name, product.price, product.category];
-    for (let i = 0; i < 3; i++) {
-        let cell = row.insertCell(i);
-        cell.innerHTML = data[i];
-        cell.contentEditable = 'true';
-    }
 
+    let name = document.createElement('input')
+    name.setAttribute('type', 'text')
+    name.value = data[0]
+    let cellName = row.insertCell(0)
+    cellName.appendChild(name)
+
+    let price = document.createElement('input')
+    price.setAttribute('type', 'number')
+    price.value = data[1]
+    let cellPrice = row.insertCell(1)
+    cellPrice.appendChild(price)
+
+    let category = document.createElement('select')
+    let options = [document.createElement("option"), document.createElement("option"), document.createElement("option")];
+    options[0].text = "Madvare";
+    options[1].text = "Drikkevare";
+    options[2].text = "Diverse";
+
+    if (data[2] === 'Madvare') {
+        options[0].setAttribute('selected', 'selected')
+    } else if (data[2] === 'Drikkevare') {
+        options[1].setAttribute('selected', 'selected')
+    } else {
+        options[2].setAttribute('selected', 'selected')
+    }
     
+    category.add(options[0]);
+    category.add(options[1]);
+    category.add(options[2]);
+    row.insertCell(2).innerHTML = category.outerHTML;
 
     // Creates two cells for update and delete functions
     var okCell = row.insertCell(3);
@@ -103,7 +127,8 @@ function insertProductRow(product) {
 
     // Sets onclick for update and delete cells
     okCell.onclick = () => {
-        updateProduct(product, row.innerText.split(/\s/).splice(0, 3));
+        console.log(category.options[category.selectedIndex])
+        updateProduct(product, [name.value, price.value, category.value]);
     }
     deleteCell.onclick = () => {
         row.parentNode.removeChild(row)
@@ -118,12 +143,13 @@ async function updateProduct(product, data) {
         price: parseInt(data[1]),
         category: data[2]
     }
-
-    console.log(await post(`/api/products/update/${product._id}`, p));
+    console.log(p)
+    // console.log(await post(`/api/products/update/${product._id}`, p));
 }
 
 async function deleteProduct(product) {
-    console.log(await deLete(`/api/products/${product._id}`))
+    console.log(product._id)
+    // console.log(await deLete(`/api/products/${product._id}`))
     products.splice(products.indexOf(product), 1)
 }
 
