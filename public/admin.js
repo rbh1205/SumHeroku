@@ -113,7 +113,7 @@ function insertProductRow(product) {
     } else {
         options[2].setAttribute('selected', 'selected')
     }
-    
+
     category.add(options[0]);
     category.add(options[1]);
     category.add(options[2]);
@@ -127,7 +127,7 @@ function insertProductRow(product) {
 
     // Sets onclick for update and delete cells
     okCell.onclick = () => {
-        console.log(category.options[category.selectedIndex])
+        console.log(category.value)
         updateProduct(product, [name.value, price.value, category.value]);
     }
     deleteCell.onclick = () => {
