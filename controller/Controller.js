@@ -47,7 +47,7 @@ exports.getOrders = function () {
 exports.updateOrder = async function (id, products, price, comment) {
     const filter = {_id: id}
     const update = {products: products, price: price, comment: comment}
-    let doc = await Order.findOneAndUpdate(filter, update, {new: true})
+    await Order.findOneAndUpdate(filter, update, {new: true})
 }
 
 exports.deleteOrder = async function (order) {
