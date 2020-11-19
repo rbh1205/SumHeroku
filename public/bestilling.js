@@ -4,14 +4,14 @@ var bordSelect = document.getElementById('bordNr')
 var bemærkningInput = document.getElementById('bemærkning')
 var regning = document.getElementById('regning')
 var samletPrisInput = document.getElementById('samletPris')
-var bordeKnap = document.getElementById('hentborde')
+var borderKnap = document.getElementById('hentborde')
 var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
 var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
 var closeElements = document.querySelectorAll("#close");
 var gemKnap = document.getElementById('saveButton')
-let editOrderTable = document.getElementById('editOrder');
+var editOrderTable = document.getElementById('editOrder');
 var editButtons;
 var products;
 var orderTable;
@@ -255,8 +255,8 @@ annullerKnap.onclick = function () {
     borderModal.style.display = "none"
 }
 
-bordeKnap.onclick = function () {
-    modal.style.display = "block"
+borderKnap.onclick = function () {
+    borderModal.style.display = "block"
 }
 
 function printRegning(time,table,waiter,price,comment) {
