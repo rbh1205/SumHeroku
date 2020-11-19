@@ -47,10 +47,10 @@ exports.getOrders = function () {
 exports.updateOrder = async function (id, products, price, comment) {
     const filter = {_id: id}
     const update = {products: products, price: price, comment: comment}
-    await Order.findOneAndUpdate(filter, update, {new: true})
+    await Order.findOneAndUpdate(filter, update)
 }
 
-exports.deleteOrder = async function (order) {
-    return await Order.deleteOne().where('_id').eq(order._id).exec()
+exports.deleteOrder = async function (orderID) {
+    return await Order.deleteOne().where('_id').eq(orderID).exec()
 };
 
