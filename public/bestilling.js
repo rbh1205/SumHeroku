@@ -4,7 +4,7 @@ var bordSelect = document.getElementById('bordNr')
 var bemærkningInput = document.getElementById('bemærkning')
 var regning = document.getElementById('regning')
 var samletPrisInput = document.getElementById('samletPris')
-var bordeKnap = document.getElementById('hentborde')
+var borderKnap = document.getElementById('hentborde')
 var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
 var borderModal = document.getElementById('bordeModal')
@@ -255,8 +255,8 @@ annullerKnap.onclick = function () {
     borderModal.style.display = "none"
 }
 
-bordeKnap.onclick = function () {
-    modal.style.display = "block"
+borderKnap.onclick = function () {
+    borderModal.style.display = "block"
 }
 
 function printRegning(time,table,waiter,price,comment) {
