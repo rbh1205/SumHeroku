@@ -97,7 +97,7 @@ function insertProductRow(product) {
 
     // Sets onclick for update and delete cells
     okCell.onclick = () => {
-        updateProduct(product, row.innerText);
+        updateProduct(product, row.innerText.split(/\s/).splice(0, 3));
     }
     deleteCell.onclick = () => {
         row.parentNode.removeChild(row)
@@ -105,11 +105,10 @@ function insertProductRow(product) {
     }
 }
 
-function updateProduct(product, inputData) {
-    let data = inputData.split(/\s/).splice(0,3)
+function updateProduct(product, data) {
 
     let p = {
-        name : data[0],
+        name: data[0],
         price: parseInt(data[1]),
         catagory: data[2]
     }
@@ -118,10 +117,9 @@ function updateProduct(product, inputData) {
 }
 
 async function deleteProduct(product) {
-    console.log(await deLete(`/api/products/${product._id}/`))
+    console.log(await deLete(`/api/products/${product._id}`))
     products.splice(products.indexOf(product), 1)
-    // console.log('Produkt slettet', product)
-    // console.log(products)
+    // console.log('Produkt slettet', product, products)
 }
 
 async function post(url, objekt) {

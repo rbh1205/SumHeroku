@@ -22,7 +22,7 @@ exports.getProducts = function () {
 };
 
 exports.deleteProduct = async function (productId) {
-    return await Product.deleteOne().where('name').eq(productId).exec()
+    return await Product.deleteOne().where('_id').eq(productId).exec()
 };
 
 exports.createOrder = function (time, table, waiter, products, price, comment) {
