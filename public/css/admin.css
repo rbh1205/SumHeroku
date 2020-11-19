@@ -1,5 +1,8 @@
 body {font-family: Arial;}
 
+img{
+    width: 20px;
+}
 
 #buttons button {
     display: block;
@@ -26,6 +29,10 @@ table th {
     text-align: left;
     background-color: #4CAF50;
     color: white;
+}
+
+a{
+    size: 100px;
 }
 
 .modal {
