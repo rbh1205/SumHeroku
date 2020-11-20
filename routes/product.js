@@ -12,26 +12,31 @@ router
         }
     })
     .post('/', async (request, response) => {
-            try {
-                let {name, price, category} = request.body;
-                await controller.createProduct(name, price, category);
-                response.send({message: 'Product saved!'});
-            } catch (e) {
-                sendStatus(e, response);
-            }
-        }
-    )
-    .delete('/:productName', async (request, response) => {
         try {
-            await controller.deleteProduct(request.params.productName);
-            response.send({message: 'Product deleted!'});
+            let { name, price, category } = request.body;
+            await controller.createProduct(name, price, category);
+            response.send({ message: 'Product saved!' });
         } catch (e) {
             sendStatus(e, response);
         }
-    }
-);
-
-    
+    }).post('/update/:productId', async (request, response) => {
+        try {
+            let { name, price, category } = request.body;
+            let update = await controller.updateProduct(request.params.productId, name, price, category);
+            response.send({ message: 'Product updated!' })
+        } catch (e) {
+            sendStatus(e, response);
+        }
+        // response.sendStatus(201)
+    })
+    .delete('/:id', async (request, response) => {
+        try {
+            await controller.deleteProduct(request.params.id);
+            response.send({ message: 'Product deleted!', id: request.params.id });
+        } catch (e) {
+            sendStatus(e, response);
+        }
+    });
 
 function sendStatus(e, response) {
     console.error("Exception: " + e);
@@ -40,4 +45,3 @@ function sendStatus(e, response) {
 }
 
 module.exports = router;
-

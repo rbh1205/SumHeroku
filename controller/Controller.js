@@ -13,6 +13,12 @@ exports.createProduct = function (name, price, category) {
     });
 };
 
+exports.updateProduct = async function (id, name, price, category) {
+    const filter = { _id: id }
+    const updatedProduct = { name, price, category }
+    await Product.findOneAndUpdate(filter, updatedProduct, { new: true })
+}
+
 exports.getProduct = function (productId) {
     return Product.findById(productId).exec();
 };
@@ -21,8 +27,8 @@ exports.getProducts = function () {
     return Product.find().populate('product').exec();
 };
 
-exports.deleteProduct = async function (productName) {
-    return await Product.deleteOne().where('name').eq(productName).exec()
+exports.deleteProduct = async function (productId) {
+    return await Product.deleteOne().where('_id').eq(productId).exec()
 };
 
 exports.createOrder = function (time, table, waiter, products, price, comment) {
@@ -44,7 +50,13 @@ exports.getOrders = function () {
     return Order.find().populate('order').exec();
 };
 
-exports.deleteOrder = async function (order) {
-    return await Order.deleteOne().where('_id').eq(order._id).exec()
+exports.updateOrder = async function (id, products, price, comment) {
+    const filter = {_id: id}
+    const update = {products: products, price: price, comment: comment}
+    await Order.findOneAndUpdate(filter, update)
+}
+
+exports.deleteOrder = async function (orderID) {
+    return await Order.deleteOne().where('_id').eq(orderID).exec()
 };
 

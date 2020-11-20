@@ -6,7 +6,6 @@
 
 <body>
     <h3>Admin</h3>
-
     <span id="buttons">
         <button id="opretBtn" class="openModal">Opret vare</button>
         <button id="ændreBtn" class="openModal">Ændre vare</button>
@@ -45,13 +44,17 @@
             <span class="close" id="close">&times;</span>
             <h3>Opret vare</h3>
             <label for="beskrivelse">Beskrivelse</label>
-            <input type="text" id="beskrivelse">
+            <input class="data" type="text" id="beskrivelse">
 
             <label for="pris">Pris</label>
-            <input type="text" id="pris">
+            <input class="data" type="number" id="pris">
 
             <label for="kategori">Kategori</label>
-            <input type="text" id="kategori">
+            <select class="data" id="kategori">
+                <option value="Madvare">Madvare</option>
+                <option value="Drikkevare">Drikkevare</option>
+                <option value="Diverse">Diverse</option>
+            </select>
 
             <button id="opret">Opret</button>
             <button id="close">Annuller</button>
