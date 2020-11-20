@@ -14,6 +14,7 @@ var closeElements = document.querySelectorAll("#close");
 var gemKnap = document.getElementById('saveButton')
 var editOrderTable = document.getElementById('editOrder');
 var betalOrderTable = document.getElementById('betalOrder')
+var productModal = document.getElementById('addProductModal')
 var editButtons;
 var deleteButtons;
 var products;
@@ -99,7 +100,7 @@ function lavRabatProcent() {
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
     } else {
         let total = pris - (pris * rabatProcent);
-    document.getElementById('samletPris').value = total;
+        document.getElementById('samletPris').value = total;
     }
 }
 
@@ -161,7 +162,7 @@ function addSalgslinje(element, pris, antal) {
 }
 
 function sletSalgslinje(event) {
-    event.currentTarget.parentElement.parentElement.parentElement.outerHTML = ""
+    event.currentTarget.parentElement.parentElement.parentElement.remove()
     samletPris()
 }
 
@@ -238,7 +239,7 @@ async function saveEditOrderHandler(event) {
     let table = editOrderTable.children[2]
     let products = [];
     for (let i = 0; i < table.children.length; i++) {
-        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].children[0].value})
+        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].children[0].value })
     }
     let productsString = JSON.stringify(products)
     let nySamletPris = editOrderTable.children[3].children[0].children[1].innerHTML
@@ -276,7 +277,7 @@ async function editOrderHandler(event) {
         }
     }
     editOrderTable.setAttribute("orderid", id)
-    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td><td><button>Tilføj produkt</button></td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td><td><button id='addProductButton'>Tilføj produkt</button></td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
     editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
 
     let enkeltPriser = calcEnkeltPris(orderToEdit)
@@ -291,6 +292,7 @@ async function editOrderHandler(event) {
     Array.from(document.querySelectorAll("#deleteProductButton")).forEach(element => {
         element.addEventListener('click', deleteProductHandler);
     })
+    document.getElementById("addProductButton").addEventListener('click', addProductModal)
 
 }
 
@@ -332,8 +334,57 @@ async function deleteOrderHandler(event) {
     }
 }
 
-function deleteProductHandler(event){
+function deleteProductHandler(event) {
     event.currentTarget.parentElement.parentElement.remove()
+}
+
+function addProductModal() {
+    productModal.style.display = "block"
+    let table = document.getElementById("addProduct")
+    table.innerHTML = generateProductTable(products)
+    let rows = table.rows
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].addEventListener('click', addProductHandler.bind(event, rows[i].children[0].innerHTML))
+    }
+}
+
+function addProductHandler(productName) {
+    let proceed = confirm("Vil du tilføje \"" + productName + "\" til bestillingen?")
+    if (proceed) {
+        let enkeltPris = 0
+        products.forEach(element => {
+            if (element.name === productName) {
+                enkeltPris = element.price
+            }
+        })
+
+        let amountInput = document.createElement("input")
+        amountInput.type = "Number"
+        amountInput.size = "6"
+        amountInput.min = "0"
+        amountInput.max = "100"
+        amountInput.value = 1
+        amountInput.addEventListener('input', editOrderPriceHandler.bind(event, enkeltPris));
+
+        let priceInput = document.createElement("input")
+        priceInput.value = enkeltPris
+        priceInput.id = "editPrice"
+        priceInput.addEventListener('input', updateSamletPrisEditOrder);
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerHTML = "X"
+        deleteButton.addEventListener('click', deleteProductHandler);
+
+        let newRow = editOrderTable.children[2].insertRow()
+        newRow.insertCell(0).innerHTML = productName
+        newRow.insertCell(1).appendChild(amountInput)
+        newRow.insertCell(2).appendChild(priceInput)
+        newRow.insertCell(3).appendChild(deleteButton)
+
+        updateSamletPrisEditOrder()
+    }
+
+    productModal.style.display = "none"
 }
 
 function insertOrderRows(order) {
@@ -353,6 +404,7 @@ function insertOrderRows(order) {
 annullerKnap.onclick = function () {
     borderModal.style.display = "none"
 }
+
 
 borderKnap.onclick = function () {
     generateOrdersModal('/api/orders')
@@ -378,6 +430,8 @@ window.onclick = function (event) {
     }
     if (event.target === editModal) {
         editModal.style.display = "none";
-        borderModal.style.display = "block";
+    }
+    if (event.target === productModal) {
+        productModal.style.display = "none"
     }
 }
