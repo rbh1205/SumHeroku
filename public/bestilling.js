@@ -228,7 +228,7 @@ async function saveEditOrderHandler(event) {
     let table = editOrderTable.children[2]
     let products = [];
     for (let i = 0; i < table.children.length; i++) {
-        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
+        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].children[0].value})
     }
     let productsString = JSON.stringify(products)
     let nySamletPris = editOrderTable.children[3].children[0].children[1].innerHTML
@@ -249,7 +249,7 @@ async function editOrderHandler(event) {
         }
     }
     editOrderTable.setAttribute("orderid", id)
-    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td><td><button>Tilføj produkt</button></td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
     editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
 
     let enkeltPriser = calcEnkeltPris(orderToEdit)
@@ -261,13 +261,16 @@ async function editOrderHandler(event) {
     Array.from(document.querySelectorAll("#editPrice")).forEach(element => {
         element.addEventListener('input', updateSamletPrisEditOrder);
     })
+    Array.from(document.querySelectorAll("#deleteProductButton")).forEach(element => {
+        element.addEventListener('click', deleteProductHandler);
+    })
 
 }
 
 
 function editOrderPriceHandler(pris) {
     let nyPris = parseInt(pris) * parseInt(event.currentTarget.value)
-    event.currentTarget.parentElement.nextElementSibling.innerHTML = nyPris
+    event.currentTarget.parentElement.nextElementSibling.children[0].value = nyPris
     updateSamletPrisEditOrder()
 }
 
@@ -302,14 +305,18 @@ async function deleteOrderHandler(event) {
     }
 }
 
+function deleteProductHandler(event){
+    event.currentTarget.parentElement.parentElement.remove()
+}
+
 function insertOrderRows(order) {
     let html = ""
     Array.from(JSON.parse(order.products)).forEach(element => {
 
         html +=
-            "<tr><td contenteditable=true>" + element.name +
+            "<tr><td>" + element.name +
             "</td><td><INPUT id='editAmount' TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
-            "</td><td><input id='editPrice' value='" + element.price + "'></input></td></tr>"
+            "</td><td><input id='editPrice' value='" + element.price + "'></input></td><td><button id='deleteProductButton'>X</button></td></tr>"
     });
     html += "<tfoot><tr><td>Samlet pris</td><td id='editSamletPris' contenteditable=true>" + order.price + "</td></tr><tr><td>Bemærkning</td><td contenteditable=true>" + order.comment + "</td></tr></tfoot>"
     return html
