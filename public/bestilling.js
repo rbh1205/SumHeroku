@@ -9,13 +9,16 @@ var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
 var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
+var betalModal = document.getElementById('betalModal')
 var closeElements = document.querySelectorAll("#close");
 var gemKnap = document.getElementById('saveButton')
 var editOrderTable = document.getElementById('editOrder');
+var betalOrderTable = document.getElementById('betalOrder')
 var editButtons;
 var deleteButtons;
 var products;
 var orderTable;
+var betalbutton; 
 
 opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
@@ -62,7 +65,7 @@ function generateProductTable(products) {
         html += '<tr id="product"><td>' + product.name +
             '</td><td>' + product.price +
             '</td></tr>\n';
-    }
+    }   
     html += '</table>';
     return html;
 }
@@ -72,7 +75,7 @@ function generateBestillingTable(orders) {
     for (order of orders) {
         html += '<tr id=' + order._id + '><td>' + order.table +
             '</td><td>' + order.price +
-            '</td><td><button id="editButton">Edit</button></td><td><button id="deleteButton">X</button></td></tr>\n';
+            '</td><td><button id="editButton">Edit</button></td><td><button id="deleteButton">X</button></td><td><button id="betalbutton">Betal</button></td></td>\n';
     }
     return html;
 }
@@ -238,6 +241,22 @@ async function saveEditOrderHandler(event) {
     editModal.style.display = "none"
     generateOrdersModal('/api/orders')
 }
+
+
+async function betalOrderHandler(event) {
+    betalModal.style.display = "block"
+    let id = event.currentTarget.parentElement.parentElement.id
+    let orderToBetal;
+    for (order of orders) {
+        if(order._id === id) {
+            orderToBetal = order
+        }
+    }
+    betalOrderTable.setAttribute("orderid", id)
+    betalOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
+}
+
 
 async function editOrderHandler(event) {
     editModal.style.display = "block"
