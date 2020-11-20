@@ -50,6 +50,7 @@ body {font-family: Arial;}
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
 }
   
 /* Modal Content */
@@ -57,9 +58,10 @@ body {font-family: Arial;}
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
-    max-width: 200px;    
+    border: 1px solid #888; 
     display: grid;
+    width: fit-content; 
+    height: fit-content; 
 }
 
 /* The Close Button */

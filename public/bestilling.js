@@ -24,6 +24,7 @@ opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
 gemKnap.onclick = saveEditOrderHandler
 
+
 for (e of closeElements) {
     e.onclick = function (event) {
         event.currentTarget.parentElement.parentElement.style.display = "none"
@@ -79,6 +80,7 @@ function generateBestillingTable(orders) {
     }
     return html;
 }
+
 
 function samletPris() {
     let priser = regning.children
@@ -224,7 +226,12 @@ async function generateOrdersModal(url) {
     Array.from(deleteButtons).forEach(element => {
         element.addEventListener('click', deleteOrderHandler)
     });
+    betalbutton = document.querySelectorAll('#betalbutton')
+    Array.from(betalbutton).forEach(element => {
+        element.addEventListener('click', betalOrderHandler)
+    })
 }
+
 
 async function saveEditOrderHandler(event) {
     let id = event.currentTarget.previousElementSibling.getAttribute("orderid")
@@ -253,8 +260,9 @@ async function betalOrderHandler(event) {
         }
     }
     betalOrderTable.setAttribute("orderid", id)
-    betalOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
-    betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
+    betalOrderTable.innerHTML = "<thead><tr><th>Betal Regning:</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToBetal))
+
 }
 
 
