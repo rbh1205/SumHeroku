@@ -12,10 +12,12 @@ var editModal = document.getElementById('editModal')
 var closeElements = document.querySelectorAll("#close");
 var gemKnap = document.getElementById('saveButton')
 var editOrderTable = document.getElementById('editOrder');
+var productTable = document.getElementById('produktTable')
 var editButtons;
 var deleteButtons;
 var products;
-var orderTable;
+var orderTable = document.getElementById('orders');
+var regningMap = new Map();
 
 opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
@@ -41,8 +43,8 @@ async function post(url, objekt) {
         body: JSON.stringify(objekt),
         headers: { 'Content-Type': 'application/json' }
     });
-    // if (respons.status !== 200) // Created
-    //     throw new Error(respons.status);
+    if (respons.status !== 200) // Created
+        throw new Error(respons.status);
     return await respons.json();
 }
 
@@ -55,16 +57,58 @@ async function deLete(url) {
     return await respons.json();
 }
 
-
-function generateProductTable(products) {
-    let html = '<table><tr><th>Beskrivelse</th><th>Pris</th></tr>';
-    for (product of products) {
-        html += '<tr id="product"><td>' + product.name +
-            '</td><td>' + product.price +
-            '</td></tr>\n';
+function createProductTable() {
+    for (const p of products) {
+        insertProductRow(p)
     }
-    html += '</table>';
-    return html;
+}
+
+function insertProductRow(product) {
+    var row = productTable.insertRow();
+
+    var data = [product.name, product.price, product.category];
+    for (let i = 0; i < 3; i++) {
+        let cell = row.insertCell(i);
+        cell.innerHTML = data[i];
+    }
+
+    row.onclick = () => productHandler(product)
+}
+
+function productHandler(product) {
+
+    if (regningMap.has(product._id)) {
+        let salgslinje = regningMap.get(product._id)
+        salgslinje.antal++;
+        salgslinje.samletPris = salgslinje.enhedsPris * salgslinje.antal;
+    } else {
+        let salgslinje = {
+            antal: 1,
+            navn: product.name,
+            samletPris: product.price,
+            enhedsPris: product.price,
+            productId: product._id
+        }
+        regningMap.set(product._id, salgslinje)
+    }
+
+    createRegningTable(regningMap);
+}
+
+function createRegningTable(map) {
+    let insertInto = document.getElementById('regningContent');
+    insertInto.innerHTML = '';
+    for (const s of map) {
+        let salgslinje = s['1'];
+        let row = insertInto.insertRow();
+        let cellName = row.insertCell();
+        let cellAmount = row.insertCell();
+        let cellPrice = row.insertCell();
+        cellName.innerHTML = salgslinje.navn
+        cellAmount.innerHTML = salgslinje.antal
+        cellPrice.innerHTML = salgslinje.samletPris
+    }
+
 }
 
 function generateBestillingTable(orders) {
@@ -77,14 +121,6 @@ function generateBestillingTable(orders) {
     return html;
 }
 
-function samletPris() {
-    let priser = regning.children
-    let samletPris = 0;
-    for (let i = 1; i < priser.length; i++) {
-        samletPris += parseInt(priser[i].children[0].children[2].innerHTML)
-    }
-    samletPrisInput.value = samletPris
-}
 
 function lavRabatProcent() {
     let pris = Number(document.getElementById('samletPris').value);
@@ -94,7 +130,7 @@ function lavRabatProcent() {
         fejlBesked.insertAdjacentHTML("afterend", "<p>Du kan ikke give så meget rabat!<br>Må ikke være mere end 100%.</p>");
     } else {
         let total = pris - (pris * rabatProcent);
-    document.getElementById('samletPris').value = total;
+        document.getElementById('samletPris').value = total;
     }
 }
 
@@ -108,51 +144,6 @@ function lavRabatKroner() {
         let total = pris - rabatKroner;
         document.getElementById('samletPris').value = total;
     }
-}
-
-function productHandler(event) {
-    let pAntal;
-    let pNavn = event.currentTarget.children[0].innerHTML;
-    let pPris = event.currentTarget.children[1].innerHTML;
-    let found = false;
-    let enkeltPris;
-    let foundElement;
-    let i = 1;
-
-    while (!found && i < regning.children.length) {
-        if (regning.children[i].children[0].children[0].innerHTML === pNavn) {
-            foundElement = regning.children[i].children[0]
-            pAntal = parseInt(foundElement.children[1].children[0].value)
-            found = true
-        }
-        i++;
-    }
-    enkeltPris = parseInt(pPris)
-    if (found) {
-        addSalgslinje(foundElement, enkeltPris, pAntal)
-    }
-    else {
-        regning.insertAdjacentHTML('beforeend', '<tr><td>' + pNavn + "</td>" + '<td><INPUT TYPE="NUMBER" MIN="0" MAX="100" STEP="1" VALUE="1" SIZE="6"></INPUT></td> <td>' + pPris + '</td><td><button>X</button></td></tr>')
-        regning.children[regning.children.length - 1].children[0].children[1].children[0].addEventListener('input', updateSalgslinje.bind(event, enkeltPris))
-        regning.children[regning.children.length - 1].children[0].children[3].children[0].addEventListener('click', sletSalgslinje)
-    }
-    samletPris()
-}
-
-function updateSalgslinje(enkeltPris, event) {
-    let antal = event.currentTarget.value;
-    let prisCell = event.currentTarget.parentElement.nextElementSibling;
-    let nyPris = antal * enkeltPris;
-    prisCell.innerHTML = nyPris;
-    samletPris();
-}
-
-function addSalgslinje(element, pris, antal) {
-    let nyAntal = antal + 1
-    let nyPris = pris * nyAntal
-    element.children[1].children[0].setAttribute('value', nyAntal);
-    element.children[2].innerHTML = nyPris
-    samletPris()
 }
 
 function sletSalgslinje(event) {
@@ -195,7 +186,8 @@ async function main(url) {
     } catch (fejl) {
         console.log(fejl);
     }
-    document.getElementById('produkter').innerHTML = generateProductTable(products);
+    // document.getElementById('produkter').innerHTML = generateProductTable(products);
+    createProductTable();
     let trs = document.querySelectorAll("#product")
     for (tr of trs)
         tr.onclick = productHandler;
@@ -210,7 +202,6 @@ async function generateOrdersModal(url) {
         console.log(fejl);
     }
 
-    orderTable = document.getElementById('orders');
     orderTable.innerHTML = "<tr><th>Bord nr.</th><th>Samlet pris</th></tr>"
     orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
     editButtons = document.querySelectorAll('#editButton')
@@ -228,7 +219,7 @@ async function saveEditOrderHandler(event) {
     let table = editOrderTable.children[2]
     let products = [];
     for (let i = 0; i < table.children.length; i++) {
-        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].children[0].value})
+        products.push({ name: table.children[i].children[0].innerHTML, amount: table.children[i].children[1].children[0].value, price: table.children[i].children[2].innerHTML })
     }
     let productsString = JSON.stringify(products)
     let nySamletPris = editOrderTable.children[3].children[0].children[1].innerHTML
@@ -249,7 +240,7 @@ async function editOrderHandler(event) {
         }
     }
     editOrderTable.setAttribute("orderid", id)
-    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td><td><button>Tilføj produkt</button></td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
+    editOrderTable.innerHTML = "<thead><tr><th>Redigér regning</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
     editOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToEdit))
 
     let enkeltPriser = calcEnkeltPris(orderToEdit)
@@ -261,16 +252,13 @@ async function editOrderHandler(event) {
     Array.from(document.querySelectorAll("#editPrice")).forEach(element => {
         element.addEventListener('input', updateSamletPrisEditOrder);
     })
-    Array.from(document.querySelectorAll("#deleteProductButton")).forEach(element => {
-        element.addEventListener('click', deleteProductHandler);
-    })
 
 }
 
 
 function editOrderPriceHandler(pris) {
     let nyPris = parseInt(pris) * parseInt(event.currentTarget.value)
-    event.currentTarget.parentElement.nextElementSibling.children[0].value = nyPris
+    event.currentTarget.parentElement.nextElementSibling.innerHTML = nyPris
     updateSamletPrisEditOrder()
 }
 
@@ -305,18 +293,14 @@ async function deleteOrderHandler(event) {
     }
 }
 
-function deleteProductHandler(event){
-    event.currentTarget.parentElement.parentElement.remove()
-}
-
 function insertOrderRows(order) {
     let html = ""
     Array.from(JSON.parse(order.products)).forEach(element => {
 
         html +=
-            "<tr><td>" + element.name +
+            "<tr><td contenteditable=true>" + element.name +
             "</td><td><INPUT id='editAmount' TYPE='NUMBER' MIN='0' MAX='100' STEP='1' VALUE='" + element.amount + "' SIZE='6'></INPUT>" +
-            "</td><td><input id='editPrice' value='" + element.price + "'></input></td><td><button id='deleteProductButton'>X</button></td></tr>"
+            "</td><td><input id='editPrice' value='" + element.price + "'></input></td></tr>"
     });
     html += "<tfoot><tr><td>Samlet pris</td><td id='editSamletPris' contenteditable=true>" + order.price + "</td></tr><tr><td>Bemærkning</td><td contenteditable=true>" + order.comment + "</td></tr></tfoot>"
     return html
