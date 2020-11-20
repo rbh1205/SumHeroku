@@ -15,6 +15,7 @@ var gemKnap = document.getElementById('saveButton')
 var editOrderTable = document.getElementById('editOrder');
 var betalOrderTable = document.getElementById('betalOrder')
 var productModal = document.getElementById('addProductModal')
+var betalKnap = document.getElementById('betalButton')
 var editButtons;
 var deleteButtons;
 var products;
@@ -24,6 +25,7 @@ var betalbutton;
 opretButton.onclick = opretHandler
 rydButton.onclick = rydRegning
 gemKnap.onclick = saveEditOrderHandler
+
 
 
 for (e of closeElements) {
@@ -229,7 +231,7 @@ async function generateOrdersModal(url) {
     });
     betalbutton = document.querySelectorAll('#betalbutton')
     Array.from(betalbutton).forEach(element => {
-        element.addEventListener('click', betalOrderHandler)
+        element.addEventListener('click', betalOrderModalHandler)
     })
 }
 
@@ -251,7 +253,7 @@ async function saveEditOrderHandler(event) {
 }
 
 
-async function betalOrderHandler(event) {
+async function betalOrderModalHandler(event) {
     betalModal.style.display = "block"
     let id = event.currentTarget.parentElement.parentElement.id
     let orderToBetal;
@@ -263,7 +265,17 @@ async function betalOrderHandler(event) {
     betalOrderTable.setAttribute("orderid", id)
     betalOrderTable.innerHTML = "<thead><tr><th>Betal Regning:</td></tr></thead><tr><td>Beskrivelse</td><td>Antal</td><td>Pris</td></tr>"
     betalOrderTable.insertAdjacentHTML('beforeend', insertOrderRows(orderToBetal))
+    betalKnap.addEventListener('click', betalOrderHandler.bind(orderToBetal))
 
+}
+
+async function betalOrderHandler(){
+    let order = JSON.stringify(this)
+    let paymentMethod = document.getElementById('betaling').value
+    console.log(order)
+    console.log(paymentMethod)
+    // await post('/api/orders/payment', {order, paymentMethod})
+    // await deLete('/api/orders/'+this._id)
 }
 
 

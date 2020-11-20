@@ -1,9 +1,9 @@
 // Order.js
 const mongoose = require('mongoose');
 
-const order = new mongoose.Schema({
+const paidOrder = new mongoose.Schema({
     order: String,
     paymentMethod: String
 });
 
-module.exports = mongoose.model('PaidOrder', order, "PaidOrder");
+module.exports = mongoose.model('PaidOrder', paidOrder, "PaidOrder");
