@@ -1,5 +1,6 @@
 const controller = require("../controller/Controller");
 const express = require('express');
+const { create } = require("../models/Order");
 const router = express.Router();
 
 router
@@ -14,8 +15,8 @@ router
     .post('/', async (request, response) => {
         try {
             let { name, price, category } = request.body;
-            await controller.createProduct(name, price, category);
-            response.send({ message: 'Product saved!' });
+            let created = await controller.createProduct(name, price, category);
+            response.send({ message: 'Product saved!', created });
         } catch (e) {
             sendStatus(e, response);
         }
