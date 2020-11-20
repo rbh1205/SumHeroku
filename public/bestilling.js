@@ -1,61 +1,13 @@
-var opretButton = document.getElementById('opretButton')
-var rydButton = document.getElementById('rydButton')
 var bordSelect = document.getElementById('bordNr')
-var bemærkningInput = document.getElementById('bemærkning')
 var regning = document.getElementById('regning')
 var samletPrisInput = document.getElementById('samletPris')
-var borderKnap = document.getElementById('hentborde')
-var annullerKnap = document.getElementById('annuller')
 var close = document.getElementById('close')
 var borderModal = document.getElementById('bordeModal')
 var editModal = document.getElementById('editModal')
-var closeElements = document.querySelectorAll("#close");
-var gemKnap = document.getElementById('saveButton')
 var editOrderTable = document.getElementById('editOrder');
-var productTable = document.getElementById('produktTable')
-var editButtons;
-var deleteButtons;
-var products;
+var products = [];
 var orderTable = document.getElementById('orders');
 var regningMap = new Map();
-
-opretButton.onclick = opretHandler
-rydButton.onclick = rydRegning
-gemKnap.onclick = saveEditOrderHandler
-
-for (e of closeElements) {
-    e.onclick = function (event) {
-        event.currentTarget.parentElement.parentElement.style.display = "none"
-    }
-}
-
-
-async function get(url) {
-    const respons = await fetch(url);
-    if (respons.status !== 200) // OK
-        throw new Error(respons.status);
-    return await respons.json();
-}
-
-async function post(url, objekt) {
-    const respons = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(objekt),
-        headers: { 'Content-Type': 'application/json' }
-    });
-    if (respons.status !== 200) // Created
-        throw new Error(respons.status);
-    return await respons.json();
-}
-
-async function deLete(url) {
-    let respons = await fetch(url, {
-        method: "DELETE"
-    });
-    if (respons.status !== 200) // OK
-        throw new Error(respons.status);
-    return await respons.json();
-}
 
 function createProductTable() {
     for (const p of products) {
@@ -64,7 +16,7 @@ function createProductTable() {
 }
 
 function insertProductRow(product) {
-    var row = productTable.insertRow();
+    var row = document.getElementById('produktTable').insertRow();
 
     var data = [product.name, product.price, product.category];
     for (let i = 0; i < 3; i++) {
@@ -121,7 +73,6 @@ function generateBestillingTable(orders) {
     return html;
 }
 
-
 function lavRabatProcent() {
     let pris = Number(document.getElementById('samletPris').value);
     let rabatProcent = Number(document.getElementById('rabatProcent').value) / 100;
@@ -152,6 +103,7 @@ function sletSalgslinje(event) {
 }
 
 async function opretHandler() {
+    let bemærkningInput = document.getElementById('bemærkning')
     let time = Date.now();
     let table = bordSelect.value;
     let waiter = 'Per';
@@ -180,21 +132,6 @@ function getRegning() {
     return toReturn;
 }
 
-async function main(url) {
-    try {
-        products = await get(url);
-    } catch (fejl) {
-        console.log(fejl);
-    }
-    // document.getElementById('produkter').innerHTML = generateProductTable(products);
-    createProductTable();
-    let trs = document.querySelectorAll("#product")
-    for (tr of trs)
-        tr.onclick = productHandler;
-}
-main('/api/products');
-
-
 async function generateOrdersModal(url) {
     try {
         orders = await get(url);
@@ -204,11 +141,11 @@ async function generateOrdersModal(url) {
 
     orderTable.innerHTML = "<tr><th>Bord nr.</th><th>Samlet pris</th></tr>"
     orderTable.insertAdjacentHTML('beforeend', generateBestillingTable(orders));
-    editButtons = document.querySelectorAll('#editButton')
+    let editButtons = document.querySelectorAll('#editButton')
     Array.from(editButtons).forEach(element => {
         element.addEventListener('click', editOrderHandler)
     });
-    deleteButtons = document.querySelectorAll('#deleteButton')
+    let deleteButtons = document.querySelectorAll('#deleteButton')
     Array.from(deleteButtons).forEach(element => {
         element.addEventListener('click', deleteOrderHandler)
     });
@@ -254,7 +191,6 @@ async function editOrderHandler(event) {
     })
 
 }
-
 
 function editOrderPriceHandler(pris) {
     let nyPris = parseInt(pris) * parseInt(event.currentTarget.value)
@@ -306,16 +242,6 @@ function insertOrderRows(order) {
     return html
 }
 
-
-annullerKnap.onclick = function () {
-    borderModal.style.display = "none"
-}
-
-borderKnap.onclick = function () {
-    generateOrdersModal('/api/orders')
-    borderModal.style.display = "block"
-}
-
 function printRegning(time, table, waiter, price, comment) {
     let bong = getRegning()
     console.log('bord ' + table + ' ' + 'tid: ' + time);
@@ -329,12 +255,71 @@ function printRegning(time, table, waiter, price, comment) {
     borderModal.style.display = "block"
 }
 
-window.onclick = function (event) {
-    if (event.target === borderModal) {
-        borderModal.style.display = "none";
-    }
-    if (event.target === editModal) {
-        editModal.style.display = "none";
-        borderModal.style.display = "block";
+async function initialize() {
+    try {
+        products = await get('/api/products');
+    } catch (fejl) {
+        console.log(fejl);
     }
 }
+
+async function get(url) {
+    const respons = await fetch(url);
+    if (respons.status !== 200) // OK
+        throw new Error(respons.status);
+    return await respons.json();
+}
+
+async function post(url, objekt) {
+    const respons = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(objekt),
+        headers: { 'Content-Type': 'application/json' }
+    });
+    if (respons.status !== 200) // Created
+        throw new Error(respons.status);
+    return await respons.json();
+}
+
+async function deLete(url) {
+    let respons = await fetch(url, {
+        method: "DELETE"
+    });
+    if (respons.status !== 200) // OK
+        throw new Error(respons.status);
+    return await respons.json();
+}
+
+async function main() {
+    document.getElementById('opretButton').onclick = opretHandler
+    document.getElementById('rydButton').onclick = rydRegning
+    document.getElementById('saveButton').onclick = saveEditOrderHandler
+
+    for (e of document.querySelectorAll("#close")) {
+        e.onclick = function (event) {
+            event.currentTarget.parentElement.parentElement.style.display = "none"
+        }
+    }
+
+    window.onclick = function (event) {
+        if (event.target === borderModal) {
+            borderModal.style.display = "none";
+        }
+        if (event.target === editModal) {
+            editModal.style.display = "none";
+            borderModal.style.display = "block";
+        }
+    }
+
+    document.getElementById('annuller').onclick = function () {
+        borderModal.style.display = "none"
+    }
+
+    document.getElementById('hentborde').onclick = function () {
+        generateOrdersModal('/api/orders')
+        borderModal.style.display = "block"
+    }
+    await initialize();
+    createProductTable();
+}
+main();
